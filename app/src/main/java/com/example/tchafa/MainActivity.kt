@@ -74,7 +74,6 @@ fun MainScreen() {
     val navController = rememberNavController()
 
     Scaffold(
-        topBar = { TopBar() },
         bottomBar = { BottomNavigationBar(navController) }
     ) {
         Navigation(navController)
@@ -82,16 +81,7 @@ fun MainScreen() {
 
 }
 
-@Composable
-fun TopBar() {
 
-    TopAppBar(
-        title = { Text(text = "Bottom Navigation", fontSize = 18.sp) },
-        backgroundColor = Color.White,
-        contentColor = Color.Black
-    )
-
-}
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
