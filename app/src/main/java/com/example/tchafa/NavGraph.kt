@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.tchafa.need.NeedDetailViews
 import com.example.tchafa.start.LoginScreen
 import com.example.tchafa.start.SignupScreen
 
@@ -22,6 +23,12 @@ fun SetupNavGraph(
             route = Screen.SignUp.route
         ){
             SignupScreen(navController = navController)
+        }
+
+        composable(
+            route = Screen.NeedDetail.route
+        ){
+            NeedDetailViews(navController = navController)
         }
     }
 }

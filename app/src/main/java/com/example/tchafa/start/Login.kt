@@ -50,6 +50,8 @@ fun LoginScreen(
 
     val screenHeight = configuration.screenHeightDp.dp
     val screenWidth = configuration.screenWidthDp.dp
+
+
    Column(
         modifier = Modifier
             .fillMaxSize()
@@ -134,7 +136,7 @@ fun LoginScreen(
             )
             Button(
                 onClick = {
-                          login()
+                    navController.navigate(route = Screen.NeedDetail.route)
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = ComponentGreen),
                 shape = RoundedCornerShape(35),
@@ -162,7 +164,7 @@ private fun login() {
 
 
 }
-    private val sign
+    //private val sign
 private fun loginInResult(result: FirebaseAuthUIAuthenticationResult){
     val response = result.idpResponse
     if(result.resultCode == RESULT_OK){
