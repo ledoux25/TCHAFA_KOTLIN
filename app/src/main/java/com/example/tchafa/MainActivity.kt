@@ -23,6 +23,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
         setContent {
             TCHAFATheme {
                 val imeState = rememberImeState()
@@ -40,10 +41,13 @@ class MainActivity : ComponentActivity() {
                         .verticalScroll(scrollState),
                     color = MaterialTheme.colors.background
                 ) {
-                    LoginScreen()
+                   // LoginScreen()
+
                 }
             }
+            SplachScreenPreview()
         }
+
     }
 }
 
@@ -56,6 +60,7 @@ fun Greeting(name: String) {
 @Composable
 fun DefaultPreview() {
     TCHAFATheme {
-        LoginScreen()
+        //LoginScreen()
+
     }
 }
