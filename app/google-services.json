@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "278337519634",
+    "project_id": "tchafa-2ab01",
+    "storage_bucket": "tchafa-2ab01.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:278337519634:android:67662ccf3020790f4b98cb",
+        "android_client_info": {
+          "package_name": "com.example.tchafa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "278337519634-edo89pa9ftrsqro6tfojq7aaqvqri4u8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAM7Dz7sxKeqaZ88kVIRIHhyT5cXGpgor0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "278337519634-edo89pa9ftrsqro6tfojq7aaqvqri4u8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

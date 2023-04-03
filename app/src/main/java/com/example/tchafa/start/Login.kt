@@ -1,15 +1,16 @@
 package com.example.tchafa.start
 
 
-import android.media.Image
+import android.app.appsearch.AppSearchResult.RESULT_OK
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -17,15 +18,24 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.tchafa.R
+import com.example.tchafa.Screen
 import com.example.tchafa.components.rememberImeState
 import com.example.tchafa.ui.theme.*
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+
+private var user: FirebaseUser? = null
 
 @Composable
-fun LoginScreen()
+fun LoginScreen(
+    navController: NavController
+)
 {
     val imeState = rememberImeState()
     val scrollState = rememberScrollState()
@@ -40,6 +50,8 @@ fun LoginScreen()
 
     val screenHeight = configuration.screenHeightDp.dp
     val screenWidth = configuration.screenWidthDp.dp
+
+
    Column(
         modifier = Modifier
             .fillMaxSize()
@@ -51,7 +63,7 @@ fun LoginScreen()
             horizontalArrangement = Arrangement.End
         ){
             Button(
-                onClick = {},
+                onClick = {navController.navigate(route = Screen.SignUp.route)},
                 colors = ButtonDefaults.buttonColors(backgroundColor = White),
                 shape = RoundedCornerShape(35),
                 modifier = Modifier
@@ -79,6 +91,7 @@ fun LoginScreen()
         }
         Column(
             Modifier
+                .clip(shape = RoundedCornerShape(20.dp))
                 .background(White)
                 .fillMaxWidth()
                 .height(screenHeight - (screenHeight / 2) - 100.dp),
@@ -122,7 +135,9 @@ fun LoginScreen()
                     unfocusedBorderColor = LightBlack)
             )
             Button(
-                onClick = {},
+                onClick = {
+                    navController.navigate(route = Screen.NeedDetail.route)
+                },
                 colors = ButtonDefaults.buttonColors(backgroundColor = ComponentGreen),
                 shape = RoundedCornerShape(35),
                 modifier = Modifier.width(125.dp)
@@ -134,12 +149,28 @@ fun LoginScreen()
         }
 
     }
+
 }
 
+private fun login() {
+    val providers = arrayListOf(
+        AuthUI.IdpConfig.EmailBuilder().build()
+    )
+    val loginIntent = AuthUI.getInstance()
+        .createSignInIntentBuilder()
+        .setAvailableProviders(providers)
+        .build()
 
 
-@Preview(showBackground = true)
-@Composable
-fun LoginPreview() {
-        LoginScreen()
+
 }
+    //private val sign
+private fun loginInResult(result: FirebaseAuthUIAuthenticationResult){
+    val response = result.idpResponse
+    if(result.resultCode == RESULT_OK){
+         user = FirebaseAuth.getInstance().currentUser
+    }else{
+        Log.e("MainActivity.kt","Error logging in "+ response?.error?.errorCode)
+    }
+}
+

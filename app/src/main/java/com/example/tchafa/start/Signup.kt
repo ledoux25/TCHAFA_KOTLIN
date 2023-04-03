@@ -18,14 +18,18 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.tchafa.R
+import com.example.tchafa.Screen
 import com.example.tchafa.ui.theme.BackgroundGreen
 import com.example.tchafa.ui.theme.ComponentGreen
 import com.example.tchafa.ui.theme.LightBlack
 import com.example.tchafa.ui.theme.White
 
 @Composable
-fun SignupScreen()
+fun SignupScreen(
+    navController: NavController
+)
 {
     val configuration = LocalConfiguration.current
 
@@ -139,7 +143,7 @@ fun SignupScreen()
             )
 
             Button(
-                onClick = {},
+                onClick = {navController.navigate(route = Screen.Login.route)},
                 colors = ButtonDefaults.buttonColors(backgroundColor = ComponentGreen),
                 shape = RoundedCornerShape(35),
                 modifier = Modifier.width(125.dp).padding(top = 10.dp)
@@ -148,11 +152,11 @@ fun SignupScreen()
             }
 
             Button(
-                onClick = {},
+                onClick = {navController.navigate(route = Screen.Login.route)},
                 colors = ButtonDefaults.buttonColors(backgroundColor = White),
                 elevation = null
             ) {
-                Text(text = "Already have an account",color = Color.Black, fontSize = 12.sp, fontFamily = FontFamily.Monospace,
+                Text(text = " I Already Have An Account",color = Color.Black, fontSize = 12.sp, fontFamily = FontFamily.Monospace,
                     modifier = Modifier.padding(bottom = 15.dp))
             }
         }
