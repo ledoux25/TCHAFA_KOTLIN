@@ -100,8 +100,11 @@ fun OnboardingScreen(modifier: Modifier = Modifier) {
 
             Text("BEGIN", Modifier.size(65.dp, 20.dp),
                 color = Color.White,
-                fontSize = 17.sp)
-            
+                fontSize = 17.sp,
+                fontFamily = FontFamily.Serif
+
+            )
+
         }
     }
 
