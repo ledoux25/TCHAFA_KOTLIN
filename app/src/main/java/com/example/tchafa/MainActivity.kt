@@ -14,12 +14,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.tchafa.components.rememberImeState
 import com.example.tchafa.start.LoginScreen
 import com.example.tchafa.start.SignupScreen
 import com.example.tchafa.ui.theme.TCHAFATheme
 
 class MainActivity : ComponentActivity() {
+
+    lateinit var navController: NavHostController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -33,15 +38,9 @@ class MainActivity : ComponentActivity() {
                         scrollState.scrollTo(scrollState.maxValue)
                     }
                 }
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(scrollState),
-                    color = MaterialTheme.colors.background
-                ) {
-                    LoginScreen()
-                }
+                    navController = rememberNavController()
+                    SetupNavGraph(navController = navController)
+
             }
         }
     }
@@ -56,6 +55,5 @@ fun Greeting(name: String) {
 @Composable
 fun DefaultPreview() {
     TCHAFATheme {
-        LoginScreen()
     }
 }
