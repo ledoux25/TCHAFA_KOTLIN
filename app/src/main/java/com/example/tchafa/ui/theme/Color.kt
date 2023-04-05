@@ -19,6 +19,7 @@ val LightBlack = Color(0x4B000000)
 val LightGreen = Color(0xFFEFF2EE)
 
 
+val PrimaryGreen = Color(0xFF7FD883)
 
 
 

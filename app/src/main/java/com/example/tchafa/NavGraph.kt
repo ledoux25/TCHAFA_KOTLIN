@@ -12,7 +12,7 @@ import com.example.tchafa.start.SignupScreen
 fun SetupNavGraph(
     navController: NavHostController
 ){
-    NavHost(navController = navController, startDestination = Screen.Login.route )
+    NavHost(navController = navController, startDestination = Screen.SplashScreen.route )
     {
         composable(
             route = Screen.Login.route
@@ -29,6 +29,12 @@ fun SetupNavGraph(
             route = Screen.NeedDetail.route
         ){
             NeedDetailViews(navController = navController)
+        }
+
+        composable(
+            route = Screen.SplashScreen.route
+        ){
+            SplachScreen(navController = navController)
         }
     }
 }
