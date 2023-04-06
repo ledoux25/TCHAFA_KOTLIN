@@ -1,13 +1,8 @@
-package com.example.tchafa
+package com.example.tchafa.navigation
 
-sealed class Screen(val route: String ) {
+import com.example.tchafa.R
 
-    object Login: Screen(route = "login_screen")
-    object SignUp:Screen(route = "signup_screen")
-    object NeedDetail:Screen(route = "need_detail_screen")
-
-    object SplashScreen :Screen(route = "splash_screen")
-
+sealed class NavigationItems(var route: String, var icon: Int, var title: String){
     object Home : NavigationItems("home", R.drawable.ic_home, "Home")
     object Search : NavigationItems("search", R.drawable.ic_search, "Search")
     object Add: NavigationItems("add", R.drawable.ic_add, "Add")

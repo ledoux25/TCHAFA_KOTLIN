@@ -2,7 +2,6 @@ package com.example.tchafa.start
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -20,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.tchafa.R
-import com.example.tchafa.Screen
+import com.example.tchafa.navigation.Screen
 import com.example.tchafa.ui.theme.BackgroundGreen
 import com.example.tchafa.ui.theme.ComponentGreen
 import com.example.tchafa.ui.theme.LightBlack

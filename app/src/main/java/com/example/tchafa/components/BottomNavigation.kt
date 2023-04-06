@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.tchafa.NavigationItems
+import com.example.tchafa.navigation.NavigationItems
 import com.example.tchafa.ui.theme.GreenIcon
 
 

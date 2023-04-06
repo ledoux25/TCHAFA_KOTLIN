@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,6 +23,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.tchafa.components.rememberImeState
 import androidx.compose.ui.unit.dp
+import com.example.tchafa.navigation.NavigationItems
+import com.example.tchafa.navigation.SetupNavGraph
 import com.example.tchafa.ui.theme.TCHAFATheme
 
 class MainActivity : ComponentActivity() {
