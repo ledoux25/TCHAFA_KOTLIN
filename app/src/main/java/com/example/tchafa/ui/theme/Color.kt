@@ -18,8 +18,11 @@ val LightGray = Color(0xFFF0F0F0)
 val LightBlack = Color(0x4B000000)
 val LightGreen = Color(0xFFEFF2EE)
 
-
 val PrimaryGreen = Color(0xFF7FD883)
+
+val GreenIcon = Color(0xFF5EC161)
+
+
 
 
 

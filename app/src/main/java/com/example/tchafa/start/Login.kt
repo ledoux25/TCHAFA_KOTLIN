@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.tchafa.R
 import com.example.tchafa.Screen
+import com.example.tchafa.components.BottomNavigationBar
 import com.example.tchafa.components.rememberImeState
 import com.example.tchafa.ui.theme.*
 import com.firebase.ui.auth.AuthUI
@@ -149,6 +150,7 @@ fun LoginScreen(
         }
 
     }
+    BottomNavigationBar(navController = navController)
 
 }
 

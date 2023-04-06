@@ -1,35 +1,29 @@
 package com.example.tchafa
 
-import android.annotation.SuppressLint
-import android.content.Context
+
 import android.os.Bundle
-import android.view.WindowManager
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
-import com.example.tchafa.components.rememberImeState
-import com.example.tchafa.start.LoginScreen
-import androidx.navigation.compose.rememberNavController
-import com.example.tchafa.start.SignupScreen
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.tchafa.components.rememberImeState
+import androidx.compose.ui.unit.dp
 import com.example.tchafa.ui.theme.TCHAFATheme
 
 class MainActivity : ComponentActivity() {
@@ -50,6 +44,7 @@ class MainActivity : ComponentActivity() {
                 }
                 navController = rememberNavController()
                 SetupNavGraph(navController = navController)
+                // A surface container using the 'background' color from the theme
             }
         }
 
@@ -72,53 +67,119 @@ fun mainView()
 }
 
 
-@Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
+fun HomeScreen() {
 
-    Scaffold(
-        topBar = { myTopBar()},
-        content = { myContent()}
-    )
-}
-
-@Composable
-fun myContent()
-{
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .background(Color.Red)
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items((0..30).toList()){
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(45.dp),
-                elevation = 23.dp
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                        Text(text = "item $it", fontSize = 15.sp)
-                }
-            }
-            Spacer(modifier = Modifier.height(15.dp))
-        }
+        Text(
+            text = "Home Screen",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
+        )
     }
+
 }
 
+@Composable
+fun ProfileScreen() {
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Profile Screen",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
+        )
+    }
+
+}
 
 @Composable
-fun myTopBar()
-{
-    TopAppBar(
-        title = { Text(text = "Scaffold")},
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(30.dp)
-    )
+fun SearchScreen() {
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Search Screen",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
+        )
+    }
+
+}
+
+@Composable
+fun AddScreen() {
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Add Screen",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
+        )
+    }
+
+}
+
+@Composable
+fun NotifScreen() {
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Notif Screen",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
+        )
+    }
+
+}
+
+@Composable
+fun Navigation(navController: NavHostController){
+
+    NavHost(navController, startDestination = NavigationItems.Home.route){
+
+        composable(NavigationItems.Home.route){
+            HomeScreen()
+        }
+
+        composable(NavigationItems.Search.route){
+            SearchScreen()
+        }
+
+        composable(NavigationItems.Add.route){
+            AddScreen()
+        }
+        composable(NavigationItems.Notifications.route){
+            NotifScreen()
+        }
+        composable(NavigationItems.Profile.route){
+            ProfileScreen()
+        }
+
+    }
+
 }
