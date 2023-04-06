@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,23 +33,26 @@ class MainActivity : ComponentActivity() {
     lateinit var navController: NavHostController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
             TCHAFATheme {
                 val imeState = rememberImeState()
                 val scrollState = rememberScrollState()
-
-                LaunchedEffect(key1 = imeState.value){
-                    if(imeState.value){
+                LaunchedEffect(key1 = imeState.value) {
+                    if (imeState.value) {
                         scrollState.scrollTo(scrollState.maxValue)
                     }
                 }
-                navController = rememberNavController()
-                SetupNavGraph(navController = navController)
-                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(scrollState),
+                ) {
+                    navController = rememberNavController()
+                    SetupNavGraph(navController = navController)
+                    // A surface container using the 'background' color from the theme
+                }
             }
         }
-
     }
 }
 
@@ -159,25 +163,25 @@ fun NotifScreen() {
 }
 
 @Composable
-fun Navigation(navController: NavHostController){
+fun Navigation(navController: NavHostController) {
 
-    NavHost(navController, startDestination = NavigationItems.Home.route){
+    NavHost(navController, startDestination = NavigationItems.Home.route) {
 
-        composable(NavigationItems.Home.route){
+        composable(NavigationItems.Home.route) {
             HomeScreen()
         }
 
-        composable(NavigationItems.Search.route){
+        composable(NavigationItems.Search.route) {
             SearchScreen()
         }
 
-        composable(NavigationItems.Add.route){
+        composable(NavigationItems.Add.route) {
             AddScreen()
         }
-        composable(NavigationItems.Notifications.route){
+        composable(NavigationItems.Notifications.route) {
             NotifScreen()
         }
-        composable(NavigationItems.Profile.route){
+        composable(NavigationItems.Profile.route) {
             ProfileScreen()
         }
 

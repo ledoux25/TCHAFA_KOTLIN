@@ -83,7 +83,7 @@ fun OnboardingScreen(modifier: Modifier = Modifier, navController: NavController
             onClick = {navController.navigate(Screen.Login.route)},
             colors = ButtonDefaults.buttonColors(backgroundColor = ComponentGreen),
             shape = RoundedCornerShape(35),
-            modifier = Modifier.width(125.dp).padding(top = 75.dp)
+            modifier = Modifier.width(125.dp).padding(top = 75.dp, bottom = 80.dp)
         ) {
             Text(text = "Begin", color = Color.Black)
         }
