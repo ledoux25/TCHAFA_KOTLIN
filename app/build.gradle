@@ -82,11 +82,14 @@ dependencies {
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0'
     testImplementation 'io.mock:mockk:1.12.2'
 
-
+    implementation 'androidx.activity:activity-ktx:1.3.1'
     implementation "com.squareup.retrofit2:retrofit:2.7.1"
     implementation "com.squareup.retrofit2:converter-gson:2.7.1"
     implementation "com.squareup.okhttp3:okhttp:4.9.2"
 
     implementation "io.insert-koin:koin-android:3.1.4"
+
+    api 'androidx.activity:activity-ktx:1.2.0-alpha07'
+    api 'androidx.fragment:fragment-ktx:1.3.0-alpha07'
 
 }
