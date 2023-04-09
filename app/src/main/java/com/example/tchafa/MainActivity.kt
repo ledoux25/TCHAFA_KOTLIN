@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -20,18 +21,18 @@ import com.example.tchafa.start.LoginScreen
 import androidx.navigation.compose.rememberNavController
 import com.example.tchafa.start.SignupScreen
 import com.example.tchafa.ui.theme.TCHAFATheme
+import com.example.tchafa.ui.theme.onBoarding.OnBoarding
+import com.google.accompanist.pager.ExperimentalPagerApi
 
 class MainActivity : ComponentActivity() {
 
     lateinit var navController: NavHostController
+    @OptIn(ExperimentalPagerApi::class)
+    @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-<<<<<<< HEAD
-
-
-=======
->>>>>>> fee0aad9183c4da434772c0bf6314c38bdd1c3cb
         setContent {
+
             TCHAFATheme {
                 val imeState = rememberImeState()
                 val scrollState = rememberScrollState()
@@ -41,36 +42,20 @@ class MainActivity : ComponentActivity() {
                         scrollState.scrollTo(scrollState.maxValue)
                     }
                 }
-<<<<<<< HEAD
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier
                         .fillMaxSize()
                         .verticalScroll(scrollState),
-                    color = MaterialTheme.colors.background
-                ) {
-                   // LoginScreen()
+                    color = MaterialTheme.colors.background,
 
-=======
-                navController = rememberNavController()
-                SetupNavGraph(navController = navController)
+                ) {
+
+                    OnBoarding()
+
+
             }
         }
-        setContent {
-            TCHAFATheme {
-                val imeState = rememberImeState()
-                val scrollState = rememberScrollState()
 
-                LaunchedEffect(key1 = imeState.value){
-                    if(imeState.value){
-                        scrollState.scrollTo(scrollState.maxValue)
-                    }
->>>>>>> fee0aad9183c4da434772c0bf6314c38bdd1c3cb
-                }
-                navController = rememberNavController()
-                SetupNavGraph(navController = navController)
-            }
-            SplachScreenPreview()
         }
 
     }
@@ -85,10 +70,6 @@ fun Greeting(name: String) {
 @Composable
 fun DefaultPreview() {
     TCHAFATheme {
-<<<<<<< HEAD
-        //LoginScreen()
 
-=======
->>>>>>> fee0aad9183c4da434772c0bf6314c38bdd1c3cb
     }
-}
+    }

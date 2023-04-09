@@ -18,9 +18,10 @@ val LightGray = Color(0xFFF0F0F0)
 val LightBlack = Color(0x4B000000)
 val LightGreen = Color(0xFFEFF2EE)
 
-
+val textcolor = Color(0xFF590D22)
 val PrimaryGreen = Color(0xFF7FD883)
+val blue = Color(0xFF001B3A)
 
-
+val colorbutton = Color(0xFF880328)
 
 

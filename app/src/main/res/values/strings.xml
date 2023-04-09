@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">TCHAFA</string>
+
+
+    <string name="onBoardingTitle1">Find your next odd \n Job in no time</string>
+    <string name="onBoardingText1">You are not alone. You have unique \n ability to go to another world</string>
+
+    <string name="onBoardingTitle2">Don t let small jobs \n go unnoticed</string>
+    <string name="onBoardingText2">In daily lives, we often rush our tasks \n trying get them finish</string>
+
+    <string name="onBoardingTitle3">Expand your \n professional horisons</string>
+    <string name="onBoardingText3">Most beginner producers learn make \n creating by simple beats</string>
+
 </resources>
