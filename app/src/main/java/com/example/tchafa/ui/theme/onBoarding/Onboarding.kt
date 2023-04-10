@@ -23,8 +23,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import com.example.tchafa.R
-import com.example.tchafa.ui.theme.TCHAFATheme
 import com.example.tchafa.ui.theme.colorbutton
 import com.example.tchafa.ui.theme.textcolor
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -60,7 +58,7 @@ fun OnBoarding(){
         BottomSection(size = items.size, index = state.currentPage) {
             if (state.currentPage+1 <items.size)
                 scope.launch(){
-                    state.scrollToPage(state.currentPage)
+                    state.scrollToPage( page = state.currentPage +1)
                 }
         }
     }
@@ -84,18 +82,18 @@ fun TopSection(){
                 onClick = { },
                 modifier = Modifier.align(Alignment.CenterStart)
             ) {
-                Icon( Icons.Outlined.KeyboardArrowLeft,null,)
+                Icon( Icons.Outlined.KeyboardArrowLeft,contentDescription = null,)
             }
 
             // skip button
             TextButton(
                 onClick = { },
-
                 modifier =  Modifier
-                    .align(Alignment.CenterEnd)
+                    .align(Alignment.CenterEnd),
 
             ) {
-                Text("skip", color = MaterialTheme.colors.onBackground)
+                Text("Skip",
+                    color = MaterialTheme.colors.onBackground)
             }
 
         }
@@ -104,37 +102,24 @@ fun TopSection(){
 
 
 @Composable
-fun BottomSection(
-    size : Int,
-    index : Int,
-    onNextClicked:()->Unit
-){
+fun BottomSection(size: Int, index: Int, onNextClicked: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(12.dp)
+    ) {
+        Indicators(size = size, index = index)
 
-    ){
-        //indicators
-        Indicators(size = 3, index = 1)
-
-        // next button
         FloatingActionButton(
-            onClick =  onNextClicked ,
-            modifier = Modifier
-                .align(Alignment.CenterEnd),
+            onClick = onNextClicked,
+            modifier = Modifier.align(Alignment.CenterEnd),
             backgroundColor = colorbutton,
             contentColor = MaterialTheme.colors.onPrimary
-
         ) {
-            Icon(Icons.Outlined.KeyboardArrowRight,null)
-
+            Icon(Icons.Outlined.KeyboardArrowRight, null)
         }
-
     }
 }
-
-
 
 
 @Composable
@@ -143,36 +128,38 @@ fun BoxScope.Indicators( size : Int , index : Int){
     Row(verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement =  Arrangement.spacedBy(12.dp),
         modifier = Modifier.align(Alignment.CenterStart)
+
     ) {
         repeat(size){
             Indicator(isSelected = it == index)
+
         }
     }
 }
 
 
 @Composable
-fun Indicator(isSelected:Boolean){
-
-
-    val width = animateDpAsState(targetValue = if (isSelected) 25.dp else 10.dp,
+fun Indicator(isSelected: Boolean) {
+    val width = animateDpAsState(
+        targetValue = if (isSelected) 25.dp else 10.dp,
         animationSpec = spring(dampingRatio = Spring.DampingRatioHighBouncy)
     )
-    Box(modifier = Modifier
-        .height(10.dp)
-        .width(width.value)
-        .clip(CircleShape)
-        .background(
-            if (isSelected) MaterialTheme.colors.primary
-            else MaterialTheme.colors.onBackground.copy(alpha = 0.5f)
-        )
+    Box(
+        modifier = Modifier
+            .height(10.dp)
+            .width(width = width.value)
+            .clip(shape = CircleShape)
+            .background(
+                if (isSelected) colorbutton
+                else MaterialTheme.colors.onBackground.copy(
+                    alpha = 0.5f
+                )
+            )
+    ) {
 
-    ){
-        
     }
 
 }
-
 
 @Composable
 
@@ -186,11 +173,10 @@ fun OnBoardingItem(
             .fillMaxSize()
             .padding(40.dp)
     ) {
-        Image(painter = painterResource(item.image), contentDescription = null )
+        Image(painter = painterResource( id= item.image), contentDescription = null )
 
         Text(
-
-            text = stringResource(item.title),
+            text = stringResource( id= item.title),
             fontSize = 24.sp,
         color = textcolor,
         fontWeight = FontWeight.Bold
@@ -198,8 +184,8 @@ fun OnBoardingItem(
         )
 
         Text(
-
-            text = stringResource(item.text),
+            text = stringResource( id=item.text),
+            fontSize = 14.sp,
             color = MaterialTheme.colors.onBackground.copy(alpha = 0.8f),
             textAlign = TextAlign.Center
         )
