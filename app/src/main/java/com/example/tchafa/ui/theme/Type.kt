@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.sp
 import com.example.tchafa.R
 
 val SecularOne = FontFamily(Font(R.font.secularone))
+val Segoeui = FontFamily(Font(R.font.segoeui))
 // Set of Material typography styles to start with
 val Typography = Typography(
     body1 = TextStyle(
