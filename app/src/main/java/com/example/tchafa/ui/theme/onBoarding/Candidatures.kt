@@ -1,6 +1,7 @@
 package com.example.tchafa.ui.theme.onBoarding
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,120 +10,216 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.tchafa.ui.theme.TCHAFATheme
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.tchafa.R
-import com.example.tchafa.ui.theme.textcolor
+import com.example.tchafa.ui.theme.*
 
 
-data class CardItem(val title: String, val description: String)
+data class PublicationBesoin(
+    val imageVector: Painter,
+    val nom:String,
+    val titre:String, )
 
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Candidature(cardItems: List<CardItem>) {
-    LazyColumn(modifier = Modifier.fillMaxWidth()) {
-        items(cardItems) { cardItem ->
-            Card(
+fun Candidatures(
+    PublicationBesoin: List<PublicationBesoin>
+){
+    LazyColumn{
+        stickyHeader{
+            TopBarApp()
+        }
+        items(PublicationBesoin){
+            CardBesoin(it)
+        }
+
+    }
+}
+@Composable
+fun TopBarApp(){
+    Box{
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .background(textcolor)
+                .padding(50.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(
+                    Icons.Rounded.ArrowBack,
+                    contentDescription = null,
+                    modifier = Modifier.size(32.dp, 32.dp)
+                )
+            }
+            // Spacer(Modifier.weight(1f))
+            Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                elevation = 8.dp
+                    .padding(1.dp),
+                //horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Column(modifier = Modifier.padding(50.dp)) {
-                    Text(text = cardItem.title)
-                    Text(text = cardItem.description)
+                Text(
+                    text = "Candidature",
+                    style = MaterialTheme.typography.body1.copy(
+                        color = Color.White,
+                        textAlign = TextAlign.Center,
+                        fontSize = 18.sp
+                    )
+                )
+            }
+
+        }
+    }
+
+}
+@Composable
+fun CardBesoin(PublicationBesoin : PublicationBesoin){
+    Card(
+        elevation = 3.dp,
+        shape = RoundedCornerShape(10.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+    ){
+        Column() {
+            Row(){
+                Image(
+                    painter = PublicationBesoin.imageVector,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(80.dp)
+                        .clip(CircleShape)
+                        .border(1.5.dp, textcolor, CircleShape)
+                        .height(84.dp)
+                )
+                Column(
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .fillMaxWidth()
+                        .weight(0.8f),
+                ) {
+                    Text(
+                        modifier=Modifier.padding(3.dp),
+                        text=PublicationBesoin.titre,
+                        color = Color.Black,
+                        style = MaterialTheme.typography.body1.copy(
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                    Text(
+                        modifier=Modifier.padding(3.dp),
+                        text = PublicationBesoin.nom,
+                        color = Color.Black,
+                        style = MaterialTheme.typography.body1.copy(
+                            fontSize = 15.sp
+                        )
+                    )
+
+
+                }
+            }
+            Row(
+
+                verticalAlignment=Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(20.dp),
+            ) {
+                Button(
+                    onClick = { /*TODO*/ },
+                    modifier= Modifier
+                        .width(150.dp)
+                        .padding(horizontal = 12.dp)
+
+
+
+
+                ) {
+                Text(
+                    "declened",
+                    style = MaterialTheme.typography.subtitle1.copy(
+                        fontSize = 12.sp,
+                        color = Color.White,
+                        textAlign = TextAlign.Center
+                    )
+                )
+            }
+                Button(
+                    onClick = { /*TODO*/ },
+                    modifier= Modifier
+                        .width(150.dp)
+                        .padding(horizontal = 12.dp),
+                    colors= androidx.compose.material.ButtonDefaults.buttonColors(
+                        contentColor = pink
+                    )
+
+                ) {
+                    Text(
+                        "Voir profil",
+                        style = MaterialTheme.typography.subtitle1.copy(
+                            fontSize = 12.sp,
+                            color = Color.White,
+                            textAlign = TextAlign.Center
+                        )
+                    )
                 }
             }
         }
     }
 }
 
-@Composable
-fun TwoInterfaces() {
-    Surface(color = MaterialTheme.colors.background) {
-        Row {
-            // Interface avec background
-            Surface(
-                modifier = Modifier
-                    .background(Color.LightGray)
-                    .weight(1f),
-                content = {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        content = {
-                            Text("Interface avec background")
-                            Text("Cette interface a un arrière-plan gris clair.")
-                        }
-                    )
-                }
-            )
-
-            Spacer(modifier = Modifier.width(16.dp))
-
-            // Interface sans background
-            Surface(
-                modifier = Modifier.weight(1f),
-                content = {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        content = {
-                            Text("Interface sans background")
-                            Text("Cette interface n'a pas d'arrière-plan.")
-                        }
-                    )
-                }
-            )
-        }
-    }
-}
-
-@Composable
-fun candidatures(){
-    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center)
-    {
-
-    }
-}
-
-
-
-@Composable
-fun myTopAppBar()
-{
-    TopAppBar(modifier = Modifier.fillMaxWidth()) {
-        Image(painter = painterResource(R.drawable.leftline), contentDescription = "", )
-        Text(text = "Toko")
-    }
-}
-
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Preview(showBackground = true)
 @Composable
-fun CandidaturePreview() {
-    val cardItems = listOf(
-        CardItem("Card Title 1", "Description of Card 1"),
-        CardItem("Card Title 2", "Description of Card 2"),
-        CardItem("Card Title 3", "Description of Card 3")
-    )
+fun PreviewApp() {
+    TCHAFATheme{
+        TopBarApp()
+        Candidatures(PublicationBesoin = listOf(
+            PublicationBesoin(
+                imageVector = painterResource(R.drawable.mouf),
+                titre= "Plombier",
+                nom = "Toko michel",
+            ),
+            PublicationBesoin(
+           imageVector = painterResource(R.drawable.mouf),
+            titre= "Electricien",
+            nom = "joseph ledoux",
+        ),
+            PublicationBesoin(
+                imageVector = painterResource(R.drawable.mouf),
+                titre= "Electricien",
+                nom = "chiemo patrice",
+            ),
+            PublicationBesoin(
+                imageVector = painterResource(R.drawable.mouf),
+                titre= "Menagere",
+                nom = "Malonju laure",
+            ),
+            PublicationBesoin(
+                imageVector = painterResource(R.drawable.mouf),
+                titre= "BabySister",
+                nom = " pouani justin",
+            ),
 
-    TCHAFATheme {
-      Scaffold(
-          topBar = { myTopAppBar() },
-          content = { Candidature(cardItems) },
 
-      )
+            )
+
+        )
     }
-}
-
-@Composable
-fun content()
-{
-    // Ici tu met la fonction de la fonction aui va gerer
-    //Candidature(cardItems)
 }

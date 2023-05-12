@@ -21,7 +21,7 @@ val LightGreen = Color(0xFFEFF2EE)
 val textcolor = Color(0xFF590D22)
 val PrimaryGreen = Color(0xFF7FD883)
 val blue = Color(0xFF001B3A)
-
+val pink=Color(0xFFE291A8)
 val colorbutton = Color(0xFF880328)
 
 
