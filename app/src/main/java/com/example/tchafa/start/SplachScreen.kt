@@ -27,7 +27,7 @@ fun SplachScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BackgroundGreen),
+                .background(Background ),
 
         ) 
         {
@@ -81,7 +81,7 @@ fun OnboardingScreen(modifier: Modifier = Modifier, navController: NavController
 
         Button(
             onClick = {navController.navigate(Screen.Login.route)},
-            colors = ButtonDefaults.buttonColors(backgroundColor = ComponentGreen),
+            colors = ButtonDefaults.buttonColors(backgroundColor = ComponentBlue),
             shape = RoundedCornerShape(35),
             modifier = Modifier.width(125.dp).padding(top = 75.dp, bottom = 80.dp)
         ) {

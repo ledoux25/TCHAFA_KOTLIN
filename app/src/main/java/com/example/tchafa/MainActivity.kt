@@ -1,6 +1,7 @@
 package com.example.tchafa
 
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -30,6 +31,7 @@ import com.google.firebase.ktx.Firebase
 class MainActivity : ComponentActivity() {
 
     lateinit var navController: NavHostController
+    @SuppressLint("UnrememberedMutableState")
     override fun onCreate(savedInstanceState: Bundle?) {
         lateinit var auth: FirebaseAuth
 

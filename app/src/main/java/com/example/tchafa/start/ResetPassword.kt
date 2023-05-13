@@ -7,14 +7,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.example.tchafa.ui.theme.BackgroundGreen
+import com.example.tchafa.ui.theme.Background
 
 @Composable
 fun resetPassword(navController: NavController){
     Column(
         Modifier
             .fillMaxSize()
-            .background(BackgroundGreen)) {
+            .background(Background)) {
         Text(text = "Test Nav" )
     }
 }

@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -33,6 +34,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 private var user: FirebaseUser? = null
+public var Email :String? = "Sanguo"
 
 @Composable
 
@@ -41,7 +43,7 @@ fun LoginScreen(
 ) {
 
     val configuration = LocalConfiguration.current
-
+    val context = LocalContext.current
     val screenHeight = configuration.screenHeightDp.dp
     val screenWidth = configuration.screenWidthDp.dp
 
@@ -63,7 +65,7 @@ fun LoginScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = BackgroundGreen),
+                .background(color = Background),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Row(
@@ -101,7 +103,7 @@ fun LoginScreen(
             }
             Column(
                 Modifier
-                    .clip(shape = RoundedCornerShape(20.dp))
+                    .clip(shape = RoundedCornerShape(20.dp,20.dp,0.dp,0.dp))
                     .background(White)
                     .fillMaxWidth()
                     .height(screenHeight - (screenHeight / 2) - 100.dp),
@@ -119,7 +121,7 @@ fun LoginScreen(
                     onValueChange = { newText ->
                         email = newText
                     },
-                    shape = RoundedCornerShape(30.dp),
+                    shape = RoundedCornerShape(15.dp),
                     modifier = Modifier
                         .height(65.dp)
                         .width(screenWidth - 75.dp),
@@ -136,7 +138,7 @@ fun LoginScreen(
                         fontFamily = FontFamily.Monospace
                     ),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = ComponentGreen,
+                        focusedBorderColor = ComponentBlue,
                         unfocusedBorderColor = LightBlack
                     )
                 )
@@ -162,34 +164,39 @@ fun LoginScreen(
                         fontFamily = FontFamily.Monospace
                     ),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = ComponentGreen,
+                        focusedBorderColor = ComponentBlue,
                         unfocusedBorderColor = LightBlack
                     )
                 )
                 Button(
                     onClick = {
-                        try {
-                            val auth = Firebase.auth
-                            auth.signInWithEmailAndPassword(email, password)
-                                .addOnCompleteListener { task ->
-                                    showMessage = if (task.isSuccessful) {
-                                        Log.d(TAG, "signInWithEmail:success")
-                                        navController.navigate("need_detail_screen")
-                                        false
-                                    } else {
-                                        Log.w(TAG, "signInWithEmail:failure", task.exception)
-                                        message = task.exception.toString()
-                                        true
+                        if (password.isEmpty() || email.isEmpty()) {
+                            Toast.makeText(context, "Fill all the blank spaces", Toast.LENGTH_SHORT)
+                        } else {
+                            try {
+                                val auth = Firebase.auth
+                                Email = email
+                                auth.signInWithEmailAndPassword(email, password)
+                                    .addOnCompleteListener { task ->
+                                        showMessage = if (task.isSuccessful) {
+                                            Log.d(TAG, "signInWithEmail:success")
+                                            navController.navigate(Screen.HomeScreen.route)
+                                            false
+                                        } else {
+                                            Log.w(TAG, "signInWithEmail:failure", task.exception)
+                                            message = task.exception.toString()
+                                            Toast.makeText(context,"Authentification failed",Toast.LENGTH_SHORT)
+                                            true
+                                        }
                                     }
-                                }
-                        } catch (e: Exception) {
-                            println(e.message)
-                            message = e.message.toString()
-                            showMessage = true
+                            } catch (e: Exception) {
+                                println(e.message)
+                                message = e.message.toString()
+                                showMessage = true
+                            }
                         }
                     },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = ComponentGreen),
-                    shape = RoundedCornerShape(35),
+                    shape = RoundedCornerShape(15),
                     modifier = Modifier.width(125.dp)
                 ) {
                     Text(text = "Login", color = Color.Black)
@@ -205,7 +212,6 @@ fun LoginScreen(
 
         }
        // BottomNavigationBar(navController = navController)
-
     }
 }
 private fun login() {

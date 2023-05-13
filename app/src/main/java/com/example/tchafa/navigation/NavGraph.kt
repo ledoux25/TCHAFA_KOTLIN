@@ -5,7 +5,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.tchafa.SplachScreen
+import com.example.tchafa.homescreen.homeScreen
 import com.example.tchafa.need.NeedDetailViews
+import com.example.tchafa.need.NeedHomeScreen
+import com.example.tchafa.profile.ProfileForm
+import com.example.tchafa.profile.ProfileScreen
+import com.example.tchafa.recommendations.PublicationHome
+import com.example.tchafa.recommendations.RecommendationHome
 import com.example.tchafa.start.LoginScreen
 import com.example.tchafa.start.SignupScreen
 import com.example.tchafa.start.resetPassword
@@ -14,7 +20,7 @@ import com.example.tchafa.start.resetPassword
 fun SetupNavGraph(
     navController: NavHostController
 ){
-    NavHost(navController = navController, startDestination = Screen.SplashScreen.route )
+    NavHost(navController = navController, startDestination = Screen.HomeScreen.route)
     {
         composable(
             route = Screen.Login.route
@@ -40,10 +46,52 @@ fun SetupNavGraph(
         }
 
         composable(
-            route = NavigationItems.Home.route
+            route = NavigationItems.Search.route
         ){
-            resetPassword(navController = navController)
+            NeedHomeScreen(navController = navController)
         }
 
+        composable(
+            route = Screen.HomeScreen.route
+        ){
+            homeScreen(navController = navController)
+        }
+
+        composable(
+            route = NavigationItems.Profile.route
+        ){
+           ProfileScreen(navController = navController)
+        }
+        composable(
+            route = NavigationItems.Add.route
+        ){
+            PublicationHome(navController = navController)
+        }
+        composable(
+            route = Screen.ProfileForm.route
+        ){
+            ProfileForm(navController = navController)
+        }
+        composable(
+            route = NavigationItems.Notifications.route
+        ){
+            RecommendationHome(navController = navController)
+        }
+        composable(
+            route = Screen.PublicationHome.route
+        ){
+            PublicationHome(navController = navController)
+        }
+        composable(
+            route = NavigationItems.Add.route
+        ){
+            PublicationHome(navController = navController)
+        }
+
+        composable(
+            route = NavigationItems.Notifications.route
+        ){
+            RecommendationHome(navController = navController)
+        }
     }
 }
