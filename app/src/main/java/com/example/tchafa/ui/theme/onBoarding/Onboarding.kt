@@ -114,6 +114,7 @@ fun BottomSection(size: Int, index: Int, onNextClicked: () -> Unit) {
             onClick = onNextClicked,
             modifier = Modifier.align(Alignment.CenterEnd),
             backgroundColor = colorbutton,
+
             contentColor = MaterialTheme.colors.onPrimary
         ) {
             Icon(Icons.Outlined.KeyboardArrowRight, null)
@@ -174,21 +175,23 @@ fun OnBoardingItem(
             .padding(40.dp)
     ) {
         Image(painter = painterResource( id= item.image), contentDescription = null )
-
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         Text(
             text = stringResource( id= item.title),
             fontSize = 24.sp,
-        color = textcolor,
-        fontWeight = FontWeight.Bold
-
+            color = textcolor,
+            fontWeight = FontWeight.Bold,
         )
+    }
 
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         Text(
             text = stringResource( id=item.text),
             fontSize = 14.sp,
             color = MaterialTheme.colors.onBackground.copy(alpha = 0.8f),
-            textAlign = TextAlign.Center
         )
+    }
+
     }
 }
 

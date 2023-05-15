@@ -1,5 +1,6 @@
 package com.example.tchafa.ui.theme
 
+
 import android.hardware.lights.Light
 import androidx.compose.ui.graphics.Color
 import androidx.core.view.KeyEventDispatcher.Component
@@ -18,10 +19,11 @@ val LightGray = Color(0xFFF0F0F0)
 val LightBlack = Color(0x4B000000)
 val LightGreen = Color(0xFFEFF2EE)
 
-val textcolor = Color(0xFF590D22)
+val primaryColor = Color(0x2C62EF) // couleur primaire
+val textcolor = Color(0xFF133CA4)
 val PrimaryGreen = Color(0xFF7FD883)
 val blue = Color(0xFF001B3A)
 val pink=Color(0xFFE291A8)
-val colorbutton = Color(0xFF880328)
+val colorbutton = Color(0xFFE2C62EF)
 
 
