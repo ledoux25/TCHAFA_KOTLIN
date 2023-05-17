@@ -26,4 +26,5 @@ val blue = Color(0xFF001B3A)
 val pink=Color(0xFFE291A8)
 val colorbutton = Color(0xFFE2C62EF)
 
+val bleu = Color(0xFFE133CA4)
 
