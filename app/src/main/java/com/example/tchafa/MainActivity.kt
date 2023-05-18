@@ -18,21 +18,14 @@ import androidx.navigation.Navigation
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.tchafa.ui.theme.TCHAFATheme
+import com.example.tchafa.log.homeScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             TCHAFATheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    BottomNavigationBar(
-
-                    )
-                }
+                homeScreen()
             }
         }
     }
