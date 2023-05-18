@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.tchafa.SplachScreen
 import com.example.tchafa.homescreen.homeScreen
 import com.example.tchafa.need.NeedDetailViews
 import com.example.tchafa.need.NeedHomeScreen
@@ -16,12 +15,15 @@ import com.example.tchafa.recommendations.RecommendationHome
 import com.example.tchafa.start.LoginScreen
 import com.example.tchafa.start.SignupScreen
 import com.example.tchafa.start.resetPassword
+import com.example.tchafa.ui.theme.onBoarding.OnBoarding
+import com.google.accompanist.pager.ExperimentalPagerApi
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun SetupNavGraph(
     navController: NavHostController
 ){
-    NavHost(navController = navController, startDestination = Screen.SplashScreen.route)
+    NavHost(navController = navController, startDestination = Screen.OnBoarding.route)
     {
         composable(
             route = Screen.Login.route
@@ -41,9 +43,9 @@ fun SetupNavGraph(
         }
 
         composable(
-            route = Screen.SplashScreen.route
+            route = Screen.OnBoarding.route
         ){
-            SplachScreen(navController = navController)
+            OnBoarding(navController = navController)
         }
 
         composable(

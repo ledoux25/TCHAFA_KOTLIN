@@ -11,7 +11,8 @@ val Teal200 = Color(0xFF03DAC5)
 
 
 val Background = Color(0xFF0077B6)
-val ComponentBlue = Color(0xFF90E0EF)
+val ComponentBlue = Color(0xFF2C62EF)
+val TextBlue = Color(0xFF133CA4)
 val LightBlue = Color(0xFFADE8F4)
 val LightViolet = Color(0xFFb8c0ff)
 val LightVioletBlue = Color(0xFFbbd0ff)
