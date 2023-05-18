@@ -5,15 +5,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.tchafa.homescreen.homeScreen
+import com.example.tchafa.start.Login
 import com.example.tchafa.need.NeedDetailViews
+import com.example.tchafa.need.NeedDetails
 import com.example.tchafa.need.NeedHomeScreen
 import com.example.tchafa.need.NeedModifyViews
 import com.example.tchafa.profile.ProfileForm
 import com.example.tchafa.profile.ProfileScreen
 import com.example.tchafa.recommendations.PublicationHome
 import com.example.tchafa.recommendations.RecommendationHome
-import com.example.tchafa.start.LoginScreen
-import com.example.tchafa.start.SignupScreen
+import com.example.tchafa.start.LoginHome
+import com.example.tchafa.start.SignUpScreen
 import com.example.tchafa.start.resetPassword
 import com.example.tchafa.ui.theme.onBoarding.OnBoarding
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -23,17 +25,22 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 fun SetupNavGraph(
     navController: NavHostController
 ){
-    NavHost(navController = navController, startDestination = Screen.OnBoarding.route)
+    NavHost(navController = navController, startDestination = Screen.NeedDetails.route)
     {
+        composable(
+            route = Screen.LoginHome.route
+        ){
+            LoginHome(navController = navController)
+        }
         composable(
             route = Screen.Login.route
         ){
-            LoginScreen(navController = navController)
+            Login(navController = navController)
         }
         composable(
             route = Screen.SignUp.route
         ){
-            SignupScreen(navController = navController)
+            SignUpScreen(navController = navController)
         }
 
         composable(
@@ -47,7 +54,11 @@ fun SetupNavGraph(
         ){
             OnBoarding(navController = navController)
         }
-
+        composable(
+            route = Screen.NeedHome.route
+        ){
+            NeedHomeScreen(navController = navController)
+        }
         composable(
             route = NavigationItems.Search.route
         ){
@@ -105,6 +116,12 @@ fun SetupNavGraph(
             route = Screen.NeedModifyView.route
         ){
             NeedModifyViews(navController = navController)
+        }
+
+        composable(
+            route = Screen.NeedDetails.route
+        ){
+            NeedDetails(navController = navController)
         }
 
     }

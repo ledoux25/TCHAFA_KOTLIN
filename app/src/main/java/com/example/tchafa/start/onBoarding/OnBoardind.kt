@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -34,12 +35,11 @@ import kotlinx.coroutines.launch
 
 @ExperimentalPagerApi
 @Composable
-@Preview
 fun OnBoarding(navController: NavController){
 
     val scope = rememberCoroutineScope()
 
-    Column(Modifier.fillMaxSize()) {
+    Column(Modifier.fillMaxSize().background(Color.White)) {
         TopSection()
 
         val items = OnBoardingItem.get()

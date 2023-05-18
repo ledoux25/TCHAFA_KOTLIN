@@ -48,7 +48,7 @@ fun NeedDetailViews( navController: NavController) {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val screenWidth = configuration.screenWidthDp.dp
-    val Salary = remember { mutableStateOf("") }
+    val Description = remember { mutableStateOf("") }
     val Localisation = remember { mutableStateOf("") }
     val Sector = remember { mutableStateOf("") }
     val Title = remember { mutableStateOf("") }
@@ -57,6 +57,7 @@ fun NeedDetailViews( navController: NavController) {
     Surface(
         modifier = Modifier
             .fillMaxSize()
+            .background(White)
             .verticalScroll(scrollState)
     ) {
         LaunchedEffect(key1 = imeState.value) {
@@ -64,43 +65,66 @@ fun NeedDetailViews( navController: NavController) {
                 scrollState.scrollTo(scrollState.maxValue)
             }
         }
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(LightGreen)
-                .padding(bottom = 20.dp),
+                .background(Color.White)
+                .padding(bottom = 30.dp),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .height((screenHeight / 6))
-                    .background(Background),
-                horizontalAlignment = Alignment.Start
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ){
                 Button(
                     onClick = { navController.popBackStack()},
-                    modifier = Modifier.height(50.dp).width(70.dp),
+                    modifier = Modifier
+                        .height(50.dp)
+                        .width(70.dp),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
                     elevation = null,
                 ) {
                     Image(painter = painterResource(R.drawable.back_arrow), contentDescription = "back", modifier = Modifier
-                        .padding(start = 7.dp)
-                        .size(50.dp))
+                        .size(55.dp)
+                        .offset(x = -17.dp))
                 }
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
-                    Text(text = "Need detail", fontSize = 42.sp, fontWeight = FontWeight.Medium, color = White)
-                }
+            }
+            Column(Modifier.fillMaxWidth()) {
+                Text(
+                    text = "Create Your Need",
+                    modifier = Modifier
+                        .padding(bottom = 3.dp, start = 20.dp),
+                    color = primaryBlue,
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "In less than a minute and",
+                    modifier = Modifier
+                        .padding(start = 20.dp),
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "publish it",
+                    modifier = Modifier
+                        .padding(bottom = 3.dp, start = 20.dp),
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
+                Text(text = "fill all the blank spaces!!", color = TextBlack)
             }
 
             Column(
                 Modifier
                     .clip(shape = RoundedCornerShape(20.dp))
                     .fillMaxWidth()
-                    .height((screenHeight / 2))
+                    .height((screenHeight / 2.5f))
                     .background(White)
                     .padding(vertical = 15.dp, horizontal = 25.dp),
                 verticalArrangement = Arrangement.SpaceAround
@@ -112,134 +136,116 @@ fun NeedDetailViews( navController: NavController) {
                     horizontalAlignment = Alignment.Start,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    TextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp)
-                            .border(
-                                BorderStroke(
-                                    width = 2.dp,
-                                    color = LightBlack
-                                ),
-                                shape = RoundedCornerShape(15)
-                            ),
-                        colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            textColor = Color.Black
-                        ),
-                        placeholder = { Text(text = "Enter Title",color = LightBlack, fontSize = 20.sp) },
+                    Row(
+                        Modifier
+                            .fillMaxWidth()){Text(text = "Title", color = Color.Black)}
+                    OutlinedTextField(
                         value = Title.value,
-                        onValueChange = {
-                            Title.value = it
-                        })
-
-                    Spacer(modifier = Modifier.height(20.dp))
-                    TextField(
+                        onValueChange = { Title.value = it },
+                        singleLine = true,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp)
-                            .border(
-                                BorderStroke(
-                                    width = 2.dp,
-                                    color = LightBlack
-                                ),
-                                shape = RoundedCornerShape(15)
-                            ),
-                        colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
+                            .fillMaxWidth(1f)
+                            .height(49.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = LightBlack,
+                            unfocusedBorderColor = LightBlack,
                             textColor = Color.Black
-                        ),
-                        placeholder = { Text(text = "Enter Localisation",color = LightBlack, fontSize = 20.sp) },
-                        value = Localisation.value,
-                        onValueChange = {
-                            Localisation.value = it
-                        })
-
-                    Spacer(modifier = Modifier.height(20.dp))
-
-                    TextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp)
-                            .border(
-                                BorderStroke(
-                                    width = 2.dp,
-                                    color = LightBlack
-                                ),
-                                shape = RoundedCornerShape(15)
-                            ),
-                        colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            textColor = Color.Black
-                        ),
-                        placeholder = { Text(text = "Enter Sector",color = LightBlack, fontSize = 20.sp) },
-                        value = Sector.value,
-                        onValueChange = {
-                            Sector.value = it
-                        })
-
-                    Spacer(modifier = Modifier.height(20.dp))
-
-                    TextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(90.dp)
-                            .border(
-                                BorderStroke(
-                                    width = 2.dp,
-                                    color = LightBlack
-                                ),
-
-                                shape = RoundedCornerShape(15)
-                            ),
-                        colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            textColor = Color.Black
-                        ),
-                        placeholder = { Text(text = "Enter Description",color = LightBlack, fontSize = 20.sp) },
-                        value = Salary.value,
-                        onValueChange = {
-                           Salary.value = it
-                        })
-                }
-            }
-            Button(
-                onClick = {
-                    if (TextUtils.isEmpty(Localisation.value.toString())) {
-                        Toast.makeText(context, "Please enter job Description", Toast.LENGTH_SHORT).show()
-                    } else if (TextUtils.isEmpty(Salary.value.toString())) {
-                        Toast.makeText(context, "Please enter job Localisation", Toast.LENGTH_SHORT)
-                            .show()
-                    } else if (TextUtils.isEmpty(Salary.value.toString())) {
-                        Toast.makeText(context, "Please enter job sector", Toast.LENGTH_SHORT)
-                            .show()
-                    } else if (TextUtils.isEmpty(Title.value.toString())) {
-                            Toast.makeText(context, "Please enter job Localisation", Toast.LENGTH_SHORT)
-                                .show()
-                    } else {
-                        addDataToFirebase(
-                            Salary.value,
-                            Localisation.value,
-                            Sector.value,
-                            Title.value,context
                         )
-                        navController.popBackStack()
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Row {
+                        Column(Modifier.width(screenWidth/2)) {
+                            Row(
+                                Modifier
+                                    .fillMaxWidth()
+                                    ){Text(text = "Localisation", color = Color.Black)}
+                            OutlinedTextField(
+                                value = Localisation.value,
+                                onValueChange = { Localisation.value = it },
+                                singleLine = true,
+                                modifier = Modifier
+                                    .width(screenWidth / 2.6f)
+                                    .height(49.dp),
+                                colors = TextFieldDefaults.outlinedTextFieldColors(
+                                    focusedBorderColor = LightBlack,
+                                    unfocusedBorderColor = LightBlack,
+                                    textColor = Color.Black
+                                )
+                            )
+                        }
+                        Column(Modifier.width(screenWidth/2)) {
+                            Row(
+                                Modifier
+                                    .fillMaxWidth()
+                                    ){Text(text = "Sector", color = Color.Black)}
+                            OutlinedTextField(
+                                value = Sector.value,
+                                onValueChange = { Sector.value = it },
+                                singleLine = true,
+                                modifier = Modifier
+                                    .width(screenWidth / 2.6f)
+                                    .height(49.dp),
+                                colors = TextFieldDefaults.outlinedTextFieldColors(
+                                    focusedBorderColor = LightBlack,
+                                    unfocusedBorderColor = LightBlack,
+                                    textColor = Color.Black
+                                )
+                            )
+                        }
                     }
 
-                },
-                colors = ButtonDefaults.buttonColors(backgroundColor = ComponentBlue),
-                shape = RoundedCornerShape(35),
-                modifier = Modifier.width(125.dp)
-            ) {
-                Text(text = "Add", color = Color.Black)
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    Row(
+                        Modifier
+                            .fillMaxWidth()){Text(text = "Description", color = Color.Black)}
+                    OutlinedTextField(
+                        value = Description.value,
+                        onValueChange = { Description.value = it },
+                        modifier = Modifier
+                            .fillMaxWidth(1f)
+                            .height(85.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = LightBlack,
+                            unfocusedBorderColor = LightBlack,
+                            textColor = Color.Black
+                        )
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                }
+            }
+            Column(Modifier.fillMaxHeight().padding(start = 20.dp, end = 20.dp, bottom = 70.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                Button(
+                    onClick = {
+                        if (TextUtils.isEmpty(Title.value.toString())) {
+                            Toast.makeText(context, "Please enter job Title", Toast.LENGTH_SHORT).show()
+                        } else if (TextUtils.isEmpty(Localisation.value.toString())) {
+                            Toast.makeText(context, "Please enter job Localisation", Toast.LENGTH_SHORT)
+                                .show()
+                        } else if (TextUtils.isEmpty(Sector.value.toString())) {
+                            Toast.makeText(context, "Please enter job sector", Toast.LENGTH_SHORT)
+                                .show()
+                        } else if (TextUtils.isEmpty(Description.value.toString())) {
+                            Toast.makeText(context, "Please enter job Description", Toast.LENGTH_SHORT)
+                                .show()
+                        } else {
+                            addDataToFirebase(
+                                Description.value,
+                                Localisation.value,
+                                Sector.value,
+                                Title.value,context
+                            )
+                            navController.popBackStack()
+                        }
+
+                    },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = ComponentBlue),
+                    shape = RoundedCornerShape(10),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "Create", color = White, fontWeight = FontWeight.Bold, fontSize = 19.sp)
+                }
             }
         }
     }

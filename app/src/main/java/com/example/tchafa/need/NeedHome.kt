@@ -13,6 +13,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,10 +22,13 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -44,9 +48,10 @@ import com.example.tchafa.start.Email
 import com.example.tchafa.ui.theme.*
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import java.sql.RowId
 
 public var needIndex : Int? = null
-var titre :String? =""
+var titre :String? ="vvc"
 
 @Composable
 @SuppressLint("UnrememberedMutableState")
@@ -106,45 +111,48 @@ fun NeedHomeScreen(navController: NavController){
 /*---------------------------------------------*/
     Column(
         Modifier
-            .background(BackgroundGray)
             .fillMaxSize())
     {
         Column(
             Modifier
                 .fillMaxWidth()
-                .height((screenHeight / 6))
-                .background(Background),
-            horizontalAlignment = Alignment.Start
-        ){
-            Image(painter = painterResource(R.drawable.back_arrow), contentDescription = "back", modifier = Modifier
-                .padding(start = 7.dp)
-                .size(50.dp)
-                .clickable { navController.popBackStack() })
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
-                Text(text = "Needs", fontSize = 42.sp, fontWeight = FontWeight.Medium, color = White)
+                .padding(top = 8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(Modifier.fillMaxWidth().padding(horizontal = 15.dp, vertical = 10.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+                Image(painter = painterResource(R.drawable.back_arrow),
+                    contentDescription = "back",
+                    modifier = Modifier
+                        .size(30.dp)
+                        .clickable { navController.popBackStack() })
+                Image(painter = painterResource(R.drawable.plus),
+                    contentDescription = "sort",
+                    modifier = Modifier
+                        .padding(start = 20.dp)
+                        .rotate(90f)
+                        .clickable { navController.navigate("need_detail_screen") }
+                        .size(30.dp))
             }
+
+            Text(text = "My Needs", color = TextBlue, fontSize = 35.sp, fontWeight = FontWeight.Medium, fontFamily = FontFamily.Monospace)
         }
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(top = 10.dp,),
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp,),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         )
-            {
-                Image(painter = painterResource(R.drawable.plus), contentDescription = "sort", modifier = Modifier
-                    .padding(start = 20.dp)
-                    .rotate(90f)
-                    .clickable { navController.navigate("need_detail_screen") }
-                    .size(30.dp))
+        {
+
             TextField(
                 value = search,
                 onValueChange = { newText -> search = newText },
                 modifier = Modifier
-                    .padding(start = 20.dp, end = 20.dp)
+                    .padding(bottom = 5.dp, top = 30.dp, end = 20.dp, start = 20.dp)
                     .height(46.dp)
-                    .width(screenWidth - 80.dp)
-                    .border(1.dp, color = LightBlack, shape = RoundedCornerShape(25.dp)),
+                    .width(screenWidth - 40.dp)
+                    .border(1.dp, color = LightBlack, shape = RoundedCornerShape(10.dp)),
                 leadingIcon = {
                     Image(
                         painter = painterResource(id = R.drawable.ic_search),
@@ -158,132 +166,94 @@ fun NeedHomeScreen(navController: NavController){
                 ),
                 colors = TextFieldDefaults.textFieldColors(
                     focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor  = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
                     textColor = Black
                 )
             )
-            }
-                LazyColumn()
-                {
-                    itemsIndexed(needList){index, item ->
+        }
+        LazyColumn(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally)
+        {
+            itemsIndexed(needList) { index, item ->
+                Column(
+                    Modifier
+                        .width(screenWidth - 40.dp)
+                        .padding(vertical = 10.dp, horizontal = 0.dp)) {
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 15.dp)
+                            .background(White)
+                            .border(1.dp, color = LightBlack, shape = RoundedCornerShape(8.dp)),) {
                         Column(
                             Modifier
-                                .fillMaxWidth()
-                                .height((screenHeight / 3) - 5.dp)
-                                .padding(horizontal = 13.dp, vertical = 10.dp)
-                                .clip(shape = RoundedCornerShape(15.dp))
-                                .background(White)
-                        )
-                        {
-
-                            Row(
-                                Modifier
-                                    .padding(top = 13.dp, bottom = 5.dp)
-                                    .fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceAround
-                            ) {
-                                needList[index]?.sector?.let{
-                                    Text(
-                                        text = it,
-                                        modifier = Modifier
-                                            .width(100.dp)
-                                            .border(1.dp, LightBlack, RoundedCornerShape(20.dp))
-                                            .clip(shape = RoundedCornerShape(20.dp))
-                                            .background(LightGray)
-                                            .padding(10.dp),
-                                        textAlign = TextAlign.Center
-                                    )
-                                }
-
-                                needList[index]?.localisation?.let{
-
-                                    Text(
-                                        text = it,
-                                        modifier = Modifier
-                                            .width(100.dp)
-                                            .border(1.dp, LightBlack, RoundedCornerShape(20.dp))
-                                            .clip(shape = RoundedCornerShape(20.dp))
-                                            .background(LightGray)
-                                            .padding(10.dp),
-                                        textAlign = TextAlign.Center
-                                    )
-                                }
+                                .width(80.dp)
+                                .padding(top = 38.dp)
+                                .fillMaxHeight(),
+                        horizontalAlignment = Alignment.CenterHorizontally) {
+                            Image(painter = painterResource(id = R.drawable.no_image), contentDescription ="no image", modifier = Modifier.size(30.dp) )
+                        }
+                        Column {
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Row(Modifier.fillMaxWidth(),horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
+                                Text(text = "UX Designer", fontSize = 30.sp, color = TextBlue)
+                                Image(painter = painterResource(id = R.drawable.next_arrow), contentDescription ="next", modifier = Modifier
+                                    .size(30.dp)
+                                    .padding(end = 8.dp)
+                                    .clickable { })
                             }
-                            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
-                                needList[index]?.Description?.let{
-                                    val index = needList[index]
-                                    titre
-                                    OutlinedTextField(
-                                        modifier = Modifier
-                                            .width(screenWidth - 40.dp)
-                                            .height((screenHeight / 6.5f) - 20.dp)
-                                            .padding(5.dp)
-                                            .clip(shape = RoundedCornerShape(20.dp))
-                                            .border(
-                                                color = Color.Transparent,
-                                                width = 1.dp,
-                                                shape = RoundedCornerShape(20.dp)
-                                            )
-                                            .background(LightGray),
-                                        shape = RoundedCornerShape(5.dp),
-                                        value = it,
-                                        onValueChange = { TODO() },
-                                        maxLines = 3,
-                                        textStyle = MaterialTheme.typography.caption,
-                                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                                            focusedBorderColor = Color.Transparent,
-                                            unfocusedBorderColor = Color.Transparent,
-                                            textColor = Black
+                            Spacer(modifier = Modifier.height(5.dp))
+                            Row(verticalAlignment = Alignment.Bottom){
+                                Column() {
+                                    Row() {
+                                        Image(
+                                            painter = painterResource(id = R.drawable.sector),
+                                            contentDescription = "sector",
                                         )
-                                    )
-                            }
-
+                                        Text(
+                                            text = "CCCCOC",
+                                            color = Black,
+                                            modifier = Modifier.padding(start = 10.dp)
+                                        )
+                                    }
+                                    Spacer(Modifier.height(10.dp))
+                                    Row(
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                    ) {
+                                        Row() {
+                                            Image(
+                                                painter = painterResource(id = R.drawable.localisation),
+                                                contentDescription = "sector"
+                                            )
+                                            Text(
+                                                text = "CCCOOC",
+                                                color = Black,
+                                                modifier = Modifier.padding(start = 10.dp)
+                                            )
+                                        }
+                                    }
                                 }
-
-                            Row(
-                                Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceAround
-                            ) {
-                                Button(
-                                    onClick = {
-                                            titre = needList[index]?.Title
-
-                                        deleteDataFromFirebase(titre, context,navController)
-                                    },
-                                    colors = ButtonDefaults.buttonColors(backgroundColor = ComponentBlue),
-                                    shape = RoundedCornerShape(35),
-                                    modifier = Modifier.width(80.dp)
+                                Button(onClick = { /*TODO*/ },
+                                modifier = Modifier
+                                    .padding(start = 80.dp)
+                                    .width(80.dp)
+                                    .height(30.dp)
+                                    .clip(shape = RoundedCornerShape(5.dp))
+                                    ,
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = ComponentBlue
+                                )
                                 ) {
-                                    Text(text = "Delete", color = Color.Black)
-                                }
-                                Button(
-                                    onClick = {
-                                        titre = needList[index]?.Title
-                                        navController.navigate(route = Screen.NeedModifyView.route)
-                                    },
-                                    colors = ButtonDefaults.buttonColors(backgroundColor = ComponentBlue),
-                                    shape = RoundedCornerShape(35),
-                                    modifier = Modifier.width(80.dp)
-                                ) {
-                                    Text(text = "Modify", color = Color.Black)
-                                }
-                                Button(
-                                    onClick = {
-                                        showDialog.value = true
-                                        needIndex = index
-                                    },
-                                    colors = ButtonDefaults.buttonColors(backgroundColor = ComponentBlue),
-                                    shape = RoundedCornerShape(35),
-                                    modifier = Modifier.width(80.dp)
-                                ) {
-                                    Text(text = "Publish", color = Color.Black)
-                                }
-                            }
+                                Text(text = "Publish", color = White)
+                            }}
+                            Spacer(modifier = Modifier.height(10.dp))
+                        }
+
                         }
                     }
+                }
             }
         }
-}
+    }
 
 
 @Composable
@@ -459,3 +429,118 @@ private fun deleteDataFromFirebase(titre: String?, context: Context, navControll
     }
 
 }
+
+/*                        Column(
+                            Modifier
+                                .fillMaxWidth()
+                                .height((screenHeight / 3) - 5.dp)
+                                .padding(horizontal = 13.dp, vertical = 10.dp)
+                                .clip(shape = RoundedCornerShape(15.dp))
+                                .background(White)
+                        )
+                        {
+
+                            Row(
+                                Modifier
+                                    .padding(top = 13.dp, bottom = 5.dp)
+                                    .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceAround
+                            ) {
+                                needList[index]?.sector?.let{
+                                    Text(
+                                        text = it,
+                                        modifier = Modifier
+                                            .width(100.dp)
+                                            .border(1.dp, LightBlack, RoundedCornerShape(20.dp))
+                                            .clip(shape = RoundedCornerShape(20.dp))
+                                            .background(LightGray)
+                                            .padding(10.dp),
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+
+                                needList[index]?.localisation?.let{
+
+                                    Text(
+                                        text = it,
+                                        modifier = Modifier
+                                            .width(100.dp)
+                                            .border(1.dp, LightBlack, RoundedCornerShape(20.dp))
+                                            .clip(shape = RoundedCornerShape(20.dp))
+                                            .background(LightGray)
+                                            .padding(10.dp),
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                            }
+                            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
+                                needList[index]?.Description?.let{
+                                    val index = needList[index]
+                                    titre
+                                    OutlinedTextField(
+                                        modifier = Modifier
+                                            .width(screenWidth - 40.dp)
+                                            .height((screenHeight / 6.5f) - 20.dp)
+                                            .padding(5.dp)
+                                            .clip(shape = RoundedCornerShape(20.dp))
+                                            .border(
+                                                color = Color.Transparent,
+                                                width = 1.dp,
+                                                shape = RoundedCornerShape(20.dp)
+                                            )
+                                            .background(LightGray),
+                                        shape = RoundedCornerShape(5.dp),
+                                        value = it,
+                                        onValueChange = { TODO() },
+                                        maxLines = 3,
+                                        textStyle = MaterialTheme.typography.caption,
+                                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                                            focusedBorderColor = Color.Transparent,
+                                            unfocusedBorderColor = Color.Transparent,
+                                            textColor = Black
+                                        )
+                                    )
+                            }
+
+                                }
+
+                            Row(
+                                Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceAround
+                            ) {
+                                Button(
+                                    onClick = {
+                                            titre = needList[index]?.Title
+
+                                        deleteDataFromFirebase(titre, context,navController)
+                                    },
+                                    colors = ButtonDefaults.buttonColors(backgroundColor = ComponentBlue),
+                                    shape = RoundedCornerShape(35),
+                                    modifier = Modifier.width(80.dp)
+                                ) {
+                                    Text(text = "Delete", color = Color.Black)
+                                }
+                                Button(
+                                    onClick = {
+                                        titre = needList[index]?.Title
+                                        navController.navigate(route = Screen.NeedModifyView.route)
+                                    },
+                                    colors = ButtonDefaults.buttonColors(backgroundColor = ComponentBlue),
+                                    shape = RoundedCornerShape(35),
+                                    modifier = Modifier.width(80.dp)
+                                ) {
+                                    Text(text = "Modify", color = Color.Black)
+                                }
+                                Button(
+                                    onClick = {
+                                        showDialog.value = true
+                                        needIndex = index
+                                    },
+                                    colors = ButtonDefaults.buttonColors(backgroundColor = ComponentBlue),
+                                    shape = RoundedCornerShape(35),
+                                    modifier = Modifier.width(80.dp)
+                                ) {
+                                    Text(text = "Publish", color = Color.Black)
+                                }
+                            }
+                        }*/

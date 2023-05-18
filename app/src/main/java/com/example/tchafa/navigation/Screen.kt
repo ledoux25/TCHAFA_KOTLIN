@@ -23,5 +23,10 @@ sealed class Screen(val route: String ) {
 
     object NeedHome : Screen (route = "NeedHome_screen")
 
+    object LoginHome : Screen (route = "login_home")
+    object NeedDetails: Screen (route = "need_details")
+
+
+
 
 }
