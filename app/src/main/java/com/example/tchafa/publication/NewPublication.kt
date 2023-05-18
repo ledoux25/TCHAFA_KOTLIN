@@ -39,10 +39,13 @@ import com.example.tchafa.components.rememberImeState
 import com.example.tchafa.data.Need
 import com.example.tchafa.data.Recommendation
 import com.example.tchafa.navigation.Screen
+import com.example.tchafa.need.titre
 import com.example.tchafa.start.Email
 import com.example.tchafa.ui.theme.*
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+
+var name :String? =""
 
 @Composable
 @SuppressLint("UnrememberedMutableState")
@@ -222,7 +225,7 @@ fun PublicationHome(navController: NavController) {
                                     .width(28.dp)
                                     .height(28.dp)
                                     .padding(start = 4.dp, top = 2.dp)
-                                    .clickable { }
+                                    .clickable {  }
                             )
                         }
                     }
@@ -251,6 +254,20 @@ fun PublicationHome(navController: NavController) {
             }
         }
     }
+}
+
+private fun deleteDataFromFirebase(titre: String?, context: Context, navController: NavController) {
+
+    val db = FirebaseFirestore.getInstance();
+    db.collection("Users").document("$Email").collection("Needs").document("$titre").delete().addOnSuccessListener {
+        Toast.makeText(context, "Needd Deleted successfully..", Toast.LENGTH_SHORT).show()
+        navController.navigate(navController.currentDestination!!.id)
+    }.addOnFailureListener {
+        // on below line displaying toast message when
+        // we are not able to delete the course
+        Toast.makeText(context, "Fail to delete need..", Toast.LENGTH_SHORT).show()
+    }
+
 }
 
 

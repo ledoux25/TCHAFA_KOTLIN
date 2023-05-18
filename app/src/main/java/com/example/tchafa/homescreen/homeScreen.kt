@@ -1,18 +1,20 @@
 package com.example.tchafa.homescreen
 
+import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -62,10 +64,13 @@ fun homeScreen(navController: NavController) {
         sidebarNav.Recoms,
         sidebarNav.Candis
     )
-
+    val context = LocalContext.current
+    var search by remember {
+        mutableStateOf("")
+    }
     Scaffold(
         topBar = { TopBar() },
-        drawerContent = {Drawer(menu_items = navigation)},
+        drawerContent = {},
         bottomBar = {
             BottomNavigationBar(navController = navController)
         }
@@ -76,100 +81,110 @@ fun homeScreen(navController: NavController) {
                 .background(White)) {
                 Row(
                     Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround
+                        .fillMaxWidth()
+                        .height(screenHeight / 5.5f),
+
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Find Your")
+                    Column(Modifier.fillMaxWidth().padding(start = 10.dp), verticalArrangement = Arrangement.Center) {
+                        Text(text = "Find your partime",
+                            color = Background,
+                            fontSize = 42.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily.Monospace
+                        )
+                        Text(text = "Earning job",
+                            color = Background,
+                            fontSize = 42.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily.Monospace)
+                    }
 
                 }
-            
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 5.dp,),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            )
+            {
+                TextField(
+                    value = search,
+                    onValueChange = { newText -> search = newText },
+                    modifier = Modifier
+                        .padding(start = 20.dp, end = 20.dp)
+                        .height(46.dp)
+                        .width(screenWidth - 40.dp)
+                        .border(1.dp, color = LightBlack, shape = RoundedCornerShape(25.dp)),
+                    leadingIcon = {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_search),
+                            contentDescription = "Search"
+                        )
+                    },
+                    label = { Text(text = "Search", color = LightBlack, fontSize = 12.sp) },
+                    textStyle = TextStyle(
+                        color = Color.Black,
+                        fontFamily = FontFamily.Monospace
+                    ),
+                    colors = TextFieldDefaults.textFieldColors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor  = Color.Transparent
+                    )
+                )
+            }
             Column(
                 Modifier
                     .width(screenWidth)
                     .clip(shape = RoundedCornerShape(30.dp))
-                    .padding(vertical = 10.dp)
-                    .background(LightGray),
+                    .padding(vertical = 10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "Recent Publications", color = Color.Black, fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Medium, fontSize = 26.sp )
+                Text(text = "Recent Publications", color = Color.Black , fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Medium, fontSize = 32.sp )
                 Row(Modifier
                     .horizontalScroll(rememberScrollState())
                 ){
                     Row(
                         modifier = Modifier.padding(vertical = 15.dp)
                     ){
-                        Card(
+                        Row(
                             Modifier
-                                .width((screenWidth / 2) - 20.dp)
+                                .width(screenWidth  - 20.dp)
                                 .height(155.dp)
+                                .background(LightGray)
                                 .padding(horizontal = 8.dp,)
+                                .clip(shape = RoundedCornerShape(15.dp)),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
                         ) {
-                        }
-                        Card(
-                            Modifier
-                                .width((screenWidth / 2) - 20.dp)
-                                .height(155.dp)
-                                .padding(horizontal = 5.dp)
-                        ) {
-                        }
-                        Card(
-                            Modifier
-                                .width((screenWidth / 2) - 20.dp)
-                                .height(155.dp)
-                                .padding(horizontal = 5.dp)
-                        ) {
-                        }
-                        Card(
-                            Modifier
-                                .width((screenWidth / 2) - 20.dp)
-                                .height(155.dp)
-                                .padding(horizontal = 5.dp)
-                        ) {
-                        }
-                        Card(
-                            Modifier
-                                .width((screenWidth / 2) - 20.dp)
-                                .height(155.dp)
-                                .padding(horizontal = 5.dp)
-                        ) {
-                        }
-                        Card(
-                            Modifier
-                                .width((screenWidth / 2) - 20.dp)
-                                .height(155.dp)
-                                .padding(horizontal = 5.dp)
-                        ) {
+                            Text(text = "No Publications found", color = Color.Black , fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Medium, fontSize = 24.sp )
                         }
                     }
 
                 }
             }
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
+            Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center,){
+                Text(
+                    text = "Ongoing Task", color = Color.Black, fontSize = 28.sp, modifier = Modifier.padding(bottom = 15.dp)
+                )
                 Column(
                     Modifier
-                        .width(screenWidth - 10.dp)
-                        .height(screenHeight / 3)
-                        .background(LightVioletBlue)
+                        .width(screenWidth - 20.dp)
+                        .height(155.dp)
+                        .background(LightGray)
+                        .clip(shape = RoundedCornerShape(15.dp)),
+                    horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
                 ) {
-
-                    Text(
-                        text = "Ongoing Task"
-                    )
-                    Row() {
-                        Text(
-                            text = "End on"
-                        )
-                        Text(
-                            text = "12/12/12"
-                        )
-                    }
-
+                    Text(text = "No ongoing task found", color = Color.Black , fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Medium, fontSize = 24.sp )
                 }
             }
         }
     }
 }
 
+/*
 @Composable
 fun  Drawer(menu_items: List<sidebarNav>){
 
@@ -210,3 +225,4 @@ fun DrawerItem(item :sidebarNav){
         )
     }
 }
+*/

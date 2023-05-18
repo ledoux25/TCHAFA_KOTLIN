@@ -75,7 +75,7 @@ fun LoginScreen(
                 Button(
                     onClick = { navController.navigate(route = Screen.SignUp.route) },
                     colors = ButtonDefaults.buttonColors(backgroundColor = White),
-                    shape = RoundedCornerShape(35),
+                    shape = RoundedCornerShape(15),
                     modifier = Modifier
                         .width(125.dp)
                         .padding(20.dp)
@@ -156,7 +156,7 @@ fun LoginScreen(
                             contentDescription = "PassWord"
                         )
                     },
-                    shape = RoundedCornerShape(30.dp),
+                    shape = RoundedCornerShape(15.dp),
                     label = { Text(text = "Password", color = LightBlack) },
                     textStyle = TextStyle(
                         color = Color.Black,
@@ -170,8 +170,8 @@ fun LoginScreen(
                 )
                 Button(
                     onClick = {
-                        if (password.isEmpty() || email.isEmpty()) {
-                            Toast.makeText(context, "Fill all the blank spaces", Toast.LENGTH_SHORT)
+                        if (password.isEmpty()|| email.isEmpty()) {
+                            Toast.makeText(context, "Fill all the blank spaces", Toast.LENGTH_SHORT).show()
                         } else {
                             try {
                                 val auth = Firebase.auth
@@ -185,7 +185,7 @@ fun LoginScreen(
                                         } else {
                                             Log.w(TAG, "signInWithEmail:failure", task.exception)
                                             message = task.exception.toString()
-                                            Toast.makeText(context,"Authentification failed",Toast.LENGTH_SHORT)
+                                            Toast.makeText(context,"Authentification failed",Toast.LENGTH_SHORT).show()
                                             true
                                         }
                                     }
@@ -197,7 +197,8 @@ fun LoginScreen(
                         }
                     },
                     shape = RoundedCornerShape(15),
-                    modifier = Modifier.width(125.dp)
+                    modifier = Modifier.width(125.dp),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = ComponentBlue)
                 ) {
                     Text(text = "Login", color = Color.Black)
                 }

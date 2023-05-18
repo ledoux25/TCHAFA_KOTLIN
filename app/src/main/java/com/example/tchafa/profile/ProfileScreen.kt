@@ -87,7 +87,7 @@ fun ProfileScreen(navController: NavController){
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween
             ){
-                Text(text = "Sanguo Joseph Ledoux", fontSize = 30.sp )
+                Text(text = "Kanteu Maxime Cabrel", fontSize = 30.sp )
                 Row(
                     Modifier
                         .fillMaxWidth()

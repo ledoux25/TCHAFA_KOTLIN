@@ -34,7 +34,9 @@ import com.example.tchafa.data.User
 import com.example.tchafa.start.Email
 import com.example.tchafa.ui.theme.*
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+
 
 
 @Composable
@@ -49,6 +51,8 @@ fun NeedDetailViews( navController: NavController) {
     val Salary = remember { mutableStateOf("") }
     val Localisation = remember { mutableStateOf("") }
     val Sector = remember { mutableStateOf("") }
+    val Title = remember { mutableStateOf("") }
+
 
     Surface(
         modifier = Modifier
@@ -108,6 +112,30 @@ fun NeedDetailViews( navController: NavController) {
                     horizontalAlignment = Alignment.Start,
                     verticalArrangement = Arrangement.Center
                 ) {
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp)
+                            .border(
+                                BorderStroke(
+                                    width = 2.dp,
+                                    color = LightBlack
+                                ),
+                                shape = RoundedCornerShape(15)
+                            ),
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            textColor = Color.Black
+                        ),
+                        placeholder = { Text(text = "Enter Title",color = LightBlack, fontSize = 20.sp) },
+                        value = Title.value,
+                        onValueChange = {
+                            Title.value = it
+                        })
+
+                    Spacer(modifier = Modifier.height(20.dp))
                     TextField(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -193,11 +221,15 @@ fun NeedDetailViews( navController: NavController) {
                     } else if (TextUtils.isEmpty(Salary.value.toString())) {
                         Toast.makeText(context, "Please enter job sector", Toast.LENGTH_SHORT)
                             .show()
+                    } else if (TextUtils.isEmpty(Title.value.toString())) {
+                            Toast.makeText(context, "Please enter job Localisation", Toast.LENGTH_SHORT)
+                                .show()
                     } else {
                         addDataToFirebase(
                             Salary.value,
                             Localisation.value,
-                            Sector.value, context
+                            Sector.value,
+                            Title.value,context
                         )
                         navController.popBackStack()
                     }
@@ -217,13 +249,14 @@ fun addDataToFirebase(
     Description: String,
     Localisation: String,
     Sector: String,
+    Titre: String,
     context: Context
 ) {
     val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-    val dbNeed: CollectionReference = db.collection("Users").document("$Email").collection("Needs")
-    val needs = Need(Description, Localisation, Sector)
+    val dbNeed: DocumentReference = db.collection("Users").document("$Email").collection("Needs").document(Titre)
+    val needs = Need(Titre,Description, Localisation, Sector)
 
-    dbNeed.add(needs).addOnSuccessListener {
+    dbNeed.set(needs).addOnSuccessListener {
         Toast.makeText(
             context,
             "Your Need has been saved sucessfully",
@@ -232,6 +265,20 @@ fun addDataToFirebase(
 
     }.addOnFailureListener { e ->
         Toast.makeText(context, "Fail to add need \n$e", Toast.LENGTH_SHORT).show()
+    }
+
+}
+
+private fun deleteDataFromFirebase(courseID: String?, context: Context, Titre: String) {
+
+    val db = FirebaseFirestore.getInstance();
+
+    db.collection("Users").document("$Email").collection("Needs").document(Titre).delete().addOnSuccessListener {
+        Toast.makeText(context, "Course Deleted successfully..", Toast.LENGTH_SHORT).show()
+    }.addOnFailureListener {
+        // on below line displaying toast message when
+        // we are not able to delete the course
+        Toast.makeText(context, "Fail to delete course..", Toast.LENGTH_SHORT).show()
     }
 
 }

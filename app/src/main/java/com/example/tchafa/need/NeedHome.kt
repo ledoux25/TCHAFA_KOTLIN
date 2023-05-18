@@ -46,6 +46,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 
 public var needIndex : Int? = null
+var titre :String? =""
 
 @Composable
 @SuppressLint("UnrememberedMutableState")
@@ -57,23 +58,22 @@ fun NeedHomeScreen(navController: NavController){
     }
 
     val configuration = LocalConfiguration.current
-
     val screenHeight = configuration.screenHeightDp.dp
     val screenWidth = configuration.screenWidthDp.dp
-
     var needList = mutableStateListOf<Need?>()
-    var db: FirebaseFirestore = FirebaseFirestore.getInstance()
+
 
     val showDialog =  remember { mutableStateOf(false) }
 
     if(showDialog.value)
-        CustomDialog(value = "", setShowDialog = {
+        CustomPublicationDialog(value = "", setShowDialog = {
             showDialog.value = it
         }) {
             Log.i("HomePage","HomePage : $it")
         }
-
-    db.collection("Needs").get()
+    /*-------------------------------------------*/
+    var db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    db.collection("Users").document("$Email").collection("Needs").get()
         .addOnSuccessListener { queryDocumentSnapshots ->
             if (!queryDocumentSnapshots.isEmpty) {
 
@@ -88,7 +88,7 @@ fun NeedHomeScreen(navController: NavController){
 
                 Toast.makeText(
                     context,
-                    "No data found in Database",
+                    "No need found create one",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -103,7 +103,7 @@ fun NeedHomeScreen(navController: NavController){
                 Toast.LENGTH_SHORT
             ).show()
         }
-
+/*---------------------------------------------*/
     Column(
         Modifier
             .background(BackgroundGray)
@@ -166,7 +166,6 @@ fun NeedHomeScreen(navController: NavController){
                 LazyColumn()
                 {
                     itemsIndexed(needList){index, item ->
-
                         Column(
                             Modifier
                                 .fillMaxWidth()
@@ -178,7 +177,9 @@ fun NeedHomeScreen(navController: NavController){
                         {
 
                             Row(
-                                Modifier.padding(top = 13.dp, bottom = 5.dp).fillMaxWidth(),
+                                Modifier
+                                    .padding(top = 13.dp, bottom = 5.dp)
+                                    .fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceAround
                             ) {
                                 needList[index]?.sector?.let{
@@ -195,6 +196,7 @@ fun NeedHomeScreen(navController: NavController){
                                 }
 
                                 needList[index]?.localisation?.let{
+
                                     Text(
                                         text = it,
                                         modifier = Modifier
@@ -209,13 +211,19 @@ fun NeedHomeScreen(navController: NavController){
                             }
                             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
                                 needList[index]?.Description?.let{
+                                    val index = needList[index]
+                                    titre
                                     OutlinedTextField(
                                         modifier = Modifier
                                             .width(screenWidth - 40.dp)
-                                            .height((screenHeight/6.5f) - 20.dp)
+                                            .height((screenHeight / 6.5f) - 20.dp)
                                             .padding(5.dp)
                                             .clip(shape = RoundedCornerShape(20.dp))
-                                            .border(color = Color.Transparent, width = 1.dp, shape = RoundedCornerShape(20.dp))
+                                            .border(
+                                                color = Color.Transparent,
+                                                width = 1.dp,
+                                                shape = RoundedCornerShape(20.dp)
+                                            )
                                             .background(LightGray),
                                         shape = RoundedCornerShape(5.dp),
                                         value = it,
@@ -238,7 +246,9 @@ fun NeedHomeScreen(navController: NavController){
                             ) {
                                 Button(
                                     onClick = {
+                                            titre = needList[index]?.Title
 
+                                        deleteDataFromFirebase(titre, context,navController)
                                     },
                                     colors = ButtonDefaults.buttonColors(backgroundColor = ComponentBlue),
                                     shape = RoundedCornerShape(35),
@@ -248,7 +258,8 @@ fun NeedHomeScreen(navController: NavController){
                                 }
                                 Button(
                                     onClick = {
-                                        navController.navigate(route = Screen.NeedDetail.route)
+                                        titre = needList[index]?.Title
+                                        navController.navigate(route = Screen.NeedModifyView.route)
                                     },
                                     colors = ButtonDefaults.buttonColors(backgroundColor = ComponentBlue),
                                     shape = RoundedCornerShape(35),
@@ -300,11 +311,18 @@ fun CustomPublicationDialog(value: String, setShowDialog: (Boolean) -> Unit, set
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Create recommendation",
+                            text = "Create Publication",
                             style = TextStyle(
                                 fontSize = 24.sp,
                                 fontFamily = FontFamily.Default,
                                 fontWeight = FontWeight.Bold
+                            )
+                        )
+                        Text(
+                            text = "(Add complementary data)",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontFamily = FontFamily.Default,
                             )
                         )
                         Icon(
@@ -320,8 +338,6 @@ fun CustomPublicationDialog(value: String, setShowDialog: (Boolean) -> Unit, set
 
                     Spacer(modifier = Modifier.height(20.dp))
 
-
-                    Spacer(modifier = Modifier.height(20.dp))
 
                     TextField(
                         modifier = Modifier
@@ -339,7 +355,7 @@ fun CustomPublicationDialog(value: String, setShowDialog: (Boolean) -> Unit, set
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent
                         ),
-                        placeholder = { Text(text = "Enter Phone Number",color = LightBlack, fontSize = 20.sp) },
+                        placeholder = { Text(text = "Enter duration (in days)",color = LightBlack, fontSize = 20.sp) },
                         value = Salaire.value,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         onValueChange = {
@@ -365,8 +381,9 @@ fun CustomPublicationDialog(value: String, setShowDialog: (Boolean) -> Unit, set
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent
                         ),
-                        placeholder = { Text(text = "Enter Description",color = LightBlack, fontSize = 20.sp) },
+                        placeholder = { Text(text = "Enter Salary (in Fcfa)",color = LightBlack, fontSize = 20.sp) },
                         value = duree.value,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         onValueChange = {
                             duree.value = it
                         })
@@ -425,6 +442,20 @@ fun addDataToFirebase(
 
     }.addOnFailureListener { e ->
         Toast.makeText(context, "Fail to add publication \n$e", Toast.LENGTH_SHORT).show()
+    }
+
+}
+
+private fun deleteDataFromFirebase(titre: String?, context: Context, navController: NavController) {
+
+    val db = FirebaseFirestore.getInstance();
+    db.collection("Users").document("$Email").collection("Needs").document("$titre").delete().addOnSuccessListener {
+        Toast.makeText(context, "Needd Deleted successfully..", Toast.LENGTH_SHORT).show()
+        navController.navigate(navController.currentDestination!!.id)
+    }.addOnFailureListener {
+        // on below line displaying toast message when
+        // we are not able to delete the course
+        Toast.makeText(context, "Fail to delete need..", Toast.LENGTH_SHORT).show()
     }
 
 }

@@ -8,6 +8,7 @@ import com.example.tchafa.SplachScreen
 import com.example.tchafa.homescreen.homeScreen
 import com.example.tchafa.need.NeedDetailViews
 import com.example.tchafa.need.NeedHomeScreen
+import com.example.tchafa.need.NeedModifyViews
 import com.example.tchafa.profile.ProfileForm
 import com.example.tchafa.profile.ProfileScreen
 import com.example.tchafa.recommendations.PublicationHome
@@ -20,7 +21,7 @@ import com.example.tchafa.start.resetPassword
 fun SetupNavGraph(
     navController: NavHostController
 ){
-    NavHost(navController = navController, startDestination = Screen.HomeScreen.route)
+    NavHost(navController = navController, startDestination = Screen.SplashScreen.route)
     {
         composable(
             route = Screen.Login.route
@@ -56,7 +57,11 @@ fun SetupNavGraph(
         ){
             homeScreen(navController = navController)
         }
-
+        composable(
+            route = NavigationItems.Home.route
+        ){
+            homeScreen(navController = navController)
+        }
         composable(
             route = NavigationItems.Profile.route
         ){
@@ -93,5 +98,12 @@ fun SetupNavGraph(
         ){
             RecommendationHome(navController = navController)
         }
+
+        composable(
+            route = Screen.NeedModifyView.route
+        ){
+            NeedModifyViews(navController = navController)
+        }
+
     }
 }

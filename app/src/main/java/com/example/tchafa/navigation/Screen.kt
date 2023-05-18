@@ -14,6 +14,9 @@ sealed class Screen(val route: String ) {
 
     object ProfileForm : Screen (route = "profile_form")
 
+    object NeedModifyView : Screen (route = "modify_need")
+
+
     object RecommendationHome : Screen (route = "recom_screen")
 
     object PublicationHome : Screen (route = "publi_screen")

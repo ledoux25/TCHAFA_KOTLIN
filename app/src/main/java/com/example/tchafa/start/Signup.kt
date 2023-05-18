@@ -185,19 +185,19 @@ fun SignupScreen(
                 Button(
                     onClick = {
                         if (password.isEmpty() || lastname.isEmpty() || email.isEmpty()) {
-                            Toast.makeText(context, "Fill all the blank spaces", Toast.LENGTH_SHORT)
+                            Toast.makeText(context, "Fill all the blank spaces", Toast.LENGTH_LONG).show()
                         } else if (password.length < 6) {
                             Toast.makeText(
                                 context,
                                 "Password Should atleast have 6 characters",
                                 Toast.LENGTH_SHORT
-                            )
+                            ).show()
                         } else if (password != lastname) {
                             Toast.makeText(
                                 context,
                                 "Password Validation Failed",
                                 Toast.LENGTH_SHORT
-                            )
+                            ).show()
                         } else {
                             lateinit var auth: FirebaseAuth
                             auth = Firebase.auth

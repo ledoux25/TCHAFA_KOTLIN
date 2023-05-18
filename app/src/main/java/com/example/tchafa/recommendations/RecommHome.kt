@@ -42,6 +42,7 @@ import com.example.tchafa.navigation.Screen
 import com.example.tchafa.start.Email
 import com.example.tchafa.ui.theme.*
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
@@ -72,7 +73,7 @@ fun RecommendationHome(navController: NavController) {
             } else {
                 Toast.makeText(
                     context,
-                    "No data found in Database",
+                    "No recommendation found, create one",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -229,7 +230,9 @@ fun RecommendationHome(navController: NavController) {
                                     .width(28.dp)
                                     .height(28.dp)
                                     .padding(start = 4.dp)
-                                    .clickable {  }
+                                    .clickable { name = recomList[index]?.FullName
+                                        deleteDataFromFirebase(name, context, navController)
+                                    }
                             )
                         }
                     }
@@ -398,10 +401,12 @@ fun CustomDialog(value: String, setShowDialog: (Boolean) -> Unit, setValue: (Str
                                     Description.value = "Field can not be empty"
                                     return@Button
                                 }else{
+                                    name = txtField.value
                                     addDataToFirebase(
                                         txtField.value,
                                         phoneNumber.value,
                                         Description.value,
+                                        name.toString(),
                                         context
                                     )
                                     setValue(txtField.value)
@@ -429,13 +434,14 @@ fun addDataToFirebase(
     Name: String,
     Number: String,
     Description : String,
+    name : String,
     context: Context
 ) {
     val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-    val dbNeed: CollectionReference = db.collection("Users").document("$Email").collection("Recoms")
+    val dbNeed: DocumentReference = db.collection("Users").document("$Email").collection("Recoms").document("$name")
     val recoms = Recommendation(Name,"",Number,Description,"on hold")
 
-    dbNeed.add(recoms).addOnSuccessListener {
+    dbNeed.set(recoms).addOnSuccessListener {
         Toast.makeText(
             context,
             "Your recommendations has been saved successfully",
@@ -444,6 +450,20 @@ fun addDataToFirebase(
 
     }.addOnFailureListener { e ->
         Toast.makeText(context, "Fail to add recommendation \n$e", Toast.LENGTH_SHORT).show()
+    }
+
+}
+
+private fun deleteDataFromFirebase(Name: String?, context: Context, navController: NavController) {
+
+    val db = FirebaseFirestore.getInstance();
+    db.collection("Users").document("$Email").collection("Needs").document("$Name").delete().addOnSuccessListener {
+        Toast.makeText(context, "Needd Deleted successfully..", Toast.LENGTH_SHORT).show()
+        navController.navigate(navController.currentDestination!!.id)
+    }.addOnFailureListener {
+        // on below line displaying toast message when
+        // we are not able to delete the course
+        Toast.makeText(context, "Fail to delete need..", Toast.LENGTH_SHORT).show()
     }
 
 }
