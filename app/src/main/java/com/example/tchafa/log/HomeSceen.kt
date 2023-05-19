@@ -2,6 +2,7 @@ package com.example.tchafa.log
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,8 +15,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -37,6 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -142,7 +147,7 @@ fun Content(screenWidth: Int, screenHeight: Int)
                         .padding(
                             top = (blueCardheight - (blueCardheight / 3) - 20).dp,
                             start = 20.dp,
-                            end = 20.dp
+                            end = 10.dp
                         )
                     )
                     {
@@ -163,28 +168,33 @@ fun Content(screenWidth: Int, screenHeight: Int)
                     .fillMaxWidth()
                     .padding(16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-
+            )
+            {
                 MyCard(title = "House keeper", screenWidth = screenWidth)
                 MyCard(title = "Plumber", screenWidth = screenWidth)
                 MyCard(title = "Chief", screenWidth = screenWidth)
-
-
-
-                /*Button(onClick = { /* Do something */ }) {
-                    Text("Button 1")
-                }
-
-                Button(onClick = { /* Do something */ }) {
-                    Text("Button 1")
-                }
-
-                Button(onClick = { /* Do something */ }) {
-                    Text("Button 3")
-                }*/
             }
 
         SomeLine(firstString = "Recent publications")
+
+        // Ici on fait la logique des listes qui sont plus bas
+
+        val elts: MutableList<Element> = mutableListOf(Element("House Keeper", "30 000"))
+        elts.add(Element("Chief", "40 000"))
+        elts.add(Element("PLomber", "20 000"))
+        elts.add(Element("Menusier", "20 000"))
+
+
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth()
+        )
+        {
+            items(elts) {
+                item -> Item(screenWidth = screenWidth, job_title = item.job_title, price = item.price)
+            }
+        }
+
+
     }
 
 
@@ -211,9 +221,12 @@ fun Mybutton()
             onClick = { /*TODO*/ },
             modifier = Modifier
                 .size(width = 100.dp, height = 50.dp)
-                .background(Color.White)
+                .background(Color.White, RoundedCornerShape(8.dp))
                 .padding(0.dp),
             shape = MaterialTheme.shapes.medium,
+            colors =  ButtonDefaults.buttonColors(
+                backgroundColor = Color.White
+            )
             )
         {
             Text(
@@ -274,17 +287,60 @@ fun MyCard(title: String, screenWidth: Int)
 }
 
 @Composable
-fun Item(screenWidth: Int)
+fun Item(screenWidth: Int, job_title: String, price: String)
 {
     val width: Int = screenWidth - 25
+    val textWidth = width - 72
+    Spacer(modifier= Modifier.height(10.dp))
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = Color.White, RoundedCornerShape(8.dp)),
+        horizontalArrangement = Arrangement.Center,
+
     ) {
-        Box(
-            modifier = Modifier.size(width = width.dp, height = 50.dp)
-                .background(color = primaryBlue, RoundedCornerShape(6.dp))
+        Row(
+            modifier = Modifier
+                .size(width = width.dp, height = 70.dp)
+                .background(color = Color.White, RoundedCornerShape(6.dp))
+                .padding(vertical = 6.dp, horizontal = 2.dp),
+
+
         ) {
+            Box(
+                modifier = Modifier
+                    .size(width = 60.dp, height = 70.dp)
+                    .background(color = secondBlue, RoundedCornerShape(6.dp))
+            )
+            {
+                // Met l'image du carree blu ici
+            }
+
+            Row(
+                modifier = Modifier
+                    .size(width = textWidth.dp, height = 70.dp)
+                    .background(color = White)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .size(height = 70.dp, width = textWidth.dp)
+                        .background(color = White)
+                        .padding(horizontal = 10.dp)
+
+                ) {
+                    Row(
+                        modifier = Modifier.width(textWidth.dp)
+                    )
+                    {
+                        Text(text = job_title, fontSize = 18.sp, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.overline)
+                        // Met l'image la ici
+                    }
+
+                    Text(text = "Un texte comme ça", fontSize = 9.sp)
+                    Text(text = price, color = primaryBlue, fontSize = 18.sp)
+                }
+            }
+
 
         }
     }
@@ -298,12 +354,12 @@ fun homeScreen()
     val screenWidth = config.screenWidthDp
     val screenHeight = config.screenHeightDp
 
-    Item(screenWidth = screenWidth)
+    //Item(screenWidth = screenWidth, "House Keeper", "30 000")
 
-    /*Scaffold(
+    Scaffold(
         topBar = { TopBar(screenWidth, screenHeight) },
         content = { Content(screenWidth, screenHeight) }
-    )*/
+    )
 }
 
 
