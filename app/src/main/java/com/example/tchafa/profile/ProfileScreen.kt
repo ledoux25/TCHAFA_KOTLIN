@@ -36,133 +36,42 @@ fun ProfileScreen(navController: NavController){
 
     Column(
         Modifier
-            .background(Background)
+            .background(White)
             .fillMaxSize(),
-        verticalArrangement = Arrangement.Bottom
-    ) {
-        Column(
+    ){
+        Row(
             Modifier
-                .fillMaxWidth()
-                .height((screenHeight / 6))
-                .background(Background),
-            horizontalAlignment = Alignment.Start
+                .padding(vertical = 10.dp, horizontal = 15.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Image(
-                painter = painterResource(R.drawable.back_arrow),
+            Image(painter = painterResource(R.drawable.back_arrow),
                 contentDescription = "back",
                 modifier = Modifier
-                    .padding(start = 7.dp)
-                    .size(50.dp)
-            )
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                Text(
-                    text = "Proffesional Profile",
-                    fontSize = 38.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = White,
-                    fontFamily = FontFamily.Monospace
-                )
+                    .size(30.dp)
+                    .clickable { navController.popBackStack() })
+        }
+        Row(){
+            Image(painter = painterResource(id = R.drawable.no_image), contentDescription ="no image", modifier = Modifier.size(30.dp) )
+            Column() {
+                Text(text = "Justin Nah", fontWeight = FontWeight.Medium , fontSize = 22.sp)
+                Text(text = "jutinnah@gmail.com", fontSize = 19.sp)
+                Button(
+                    onClick = { /*TODO*/ },
+                    modifier = Modifier.width(65.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = ComponentBlue
+                    )
+                ) {
+                    Text(text = "Edit Profile")
+                }
             }
         }
-        Column(
-            Modifier
-
-                .height(screenHeight / 1.2f)
-                .clip(shape = RoundedCornerShape(40.dp, 40.dp, 0.dp, 0.dp))
-                .background(LightGray)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-
-        ) {
-
-            Column (
-                Modifier
-                    .width(screenWidth / 1.1f)
-                    .height(screenHeight / 3.8f)
-                    .padding(vertical = 20.dp, horizontal = 15.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .shadow(elevation = 3.dp)
-                    .background(White)
-                    .padding(15.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween
-            ){
-                Text(text = "Kanteu Maxime Cabrel", fontSize = 30.sp )
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(start = 11.dp, top = 3.dp)) {
-                    Text(text = "Birthday : ", fontSize = 22.sp)
-                    Text(text = " 25/02/2006", fontSize = 22.sp)
-                }
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(start = 11.dp, top = 4.dp)) {
-                    Text(text = "Average :", fontSize = 22.sp )
-                    Text(text = " 3/5", fontSize = 22.sp )
-                }
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(start = 11.dp, top = 3.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,) {
-                    Row(Modifier.padding(top =4.dp)) {
-                        Text(text = "Sex : ", fontSize = 22.sp )
-                        Text(text = " M", fontSize = 22.sp)
-                    }
-                       Button(
-                           onClick = {navController.navigate(Screen.ProfileForm.route)},
-                           colors = ButtonDefaults.buttonColors(backgroundColor = ComponentBlue),
-                           shape = RoundedCornerShape(35),
-                           modifier = Modifier
-                               .width(100.dp)
-                               .height(145.dp)
-                       ) {
-                           Text(
-                               text = " Modify",
-                               fontSize = 20.sp,
-                               fontFamily = FontFamily.Monospace,
-                           )
-                   }
-                }
-            }
-            
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState())
-            ) {
-                Card(
-                    Modifier
-                        .width(screenWidth / 1.5f)
-                        .height(155.dp)
-                        .padding(horizontal = 8.dp,)
-                ) {
-                }
-                Card(
-                    Modifier
-                        .width(screenWidth / 1.5f)
-                        .height(155.dp)
-                        .padding(horizontal = 8.dp,)
-                ) {
-                }
-                Column(
-                    Modifier
-                        .width(screenWidth / 1.5f)
-                        .height(155.dp)
-                        .padding(horizontal = 8.dp,)
-                ) {
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                        Text(text = "Domestique")
-                    }
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                        Text(text = "Spécialiter")
-                    }
-                    Column() {
-                        
-                    }
-                }
+        Column() {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Image(painter = painterResource(id = R.drawable.person), contentDescription = "yes")
+                Text(text = "Personal Informations")
+                Image(painter = painterResource(id = R.drawable.next_arrow), contentDescription = "yes")
             }
         }
     }

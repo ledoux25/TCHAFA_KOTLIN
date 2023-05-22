@@ -47,11 +47,12 @@ import com.example.tchafa.recommendations.CustomDialog
 import com.example.tchafa.start.Email
 import com.example.tchafa.ui.theme.*
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import java.sql.RowId
 
 public var needIndex : Int? = null
-var titre :String? ="vvc"
+var titre :String? = ""
 
 @Composable
 @SuppressLint("UnrememberedMutableState")
@@ -119,7 +120,10 @@ fun NeedHomeScreen(navController: NavController){
                 .padding(top = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(Modifier.fillMaxWidth().padding(horizontal = 15.dp, vertical = 10.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp, vertical = 10.dp), horizontalArrangement = Arrangement.SpaceBetween) {
                 Image(painter = painterResource(R.drawable.back_arrow),
                     contentDescription = "back",
                     modifier = Modifier
@@ -149,7 +153,7 @@ fun NeedHomeScreen(navController: NavController){
                 value = search,
                 onValueChange = { newText -> search = newText },
                 modifier = Modifier
-                    .padding(bottom = 5.dp, top = 30.dp, end = 20.dp, start = 20.dp)
+                    .padding(bottom = 25.dp, top = 30.dp, end = 20.dp, start = 20.dp)
                     .height(46.dp)
                     .width(screenWidth - 40.dp)
                     .border(1.dp, color = LightBlack, shape = RoundedCornerShape(10.dp)),
@@ -177,7 +181,7 @@ fun NeedHomeScreen(navController: NavController){
                 Column(
                     Modifier
                         .width(screenWidth - 40.dp)
-                        .padding(vertical = 10.dp, horizontal = 0.dp)) {
+                        .padding(vertical = 0.dp, horizontal = 0.dp)) {
                     Row(
                         Modifier
                             .fillMaxWidth()
@@ -195,11 +199,20 @@ fun NeedHomeScreen(navController: NavController){
                         Column {
                             Spacer(modifier = Modifier.height(10.dp))
                             Row(Modifier.fillMaxWidth(),horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
-                                Text(text = "UX Designer", fontSize = 30.sp, color = TextBlue)
+                                needList[index]?.Title?.let {
+                                    Text(text = it, fontSize = 30.sp, color = TextBlue)
+                                }
                                 Image(painter = painterResource(id = R.drawable.next_arrow), contentDescription ="next", modifier = Modifier
                                     .size(30.dp)
                                     .padding(end = 8.dp)
-                                    .clickable { })
+                                    .clickable {
+                                        titre = ""
+                                        titre = needList[index]?.Title
+                                        if (titre != "") {
+                                            titre = needList[index]?.Title
+                                            navController.navigate(route = Screen.NeedDetails.route)
+                                        }
+                                    })
                             }
                             Spacer(modifier = Modifier.height(5.dp))
                             Row(verticalAlignment = Alignment.Bottom){
@@ -209,45 +222,50 @@ fun NeedHomeScreen(navController: NavController){
                                             painter = painterResource(id = R.drawable.sector),
                                             contentDescription = "sector",
                                         )
+                                        needList[index]?.sector?.let{
                                         Text(
-                                            text = "CCCCOC",
+                                            text = it,
                                             color = Black,
                                             modifier = Modifier.padding(start = 10.dp)
-                                        )
+                                        )}
                                     }
                                     Spacer(Modifier.height(10.dp))
                                     Row(
                                         horizontalArrangement = Arrangement.SpaceBetween,
+                                        modifier = Modifier.fillMaxWidth()
                                     ) {
                                         Row() {
                                             Image(
                                                 painter = painterResource(id = R.drawable.localisation),
                                                 contentDescription = "sector"
                                             )
+                                            needList[index]?.localisation?.let{
                                             Text(
-                                                text = "CCCOOC",
+                                                text = it,
                                                 color = Black,
                                                 modifier = Modifier.padding(start = 10.dp)
+                                            )}
+                                        }
+                                        Button(onClick = {
+                                            showDialog.value = true
+                                            needIndex = index },
+                                            modifier = Modifier
+                                                .padding(end = 20.dp)
+                                                .width(80.dp)
+                                                .height(30.dp)
+                                                .clip(shape = RoundedCornerShape(5.dp))
+                                            ,
+                                            colors = ButtonDefaults.buttonColors(
+                                                backgroundColor = ComponentBlue
                                             )
+                                        ) {
+                                            Text(text = "Publish", color = White)
                                         }
                                     }
                                 }
-                                Button(onClick = { /*TODO*/ },
-                                modifier = Modifier
-                                    .padding(start = 80.dp)
-                                    .width(80.dp)
-                                    .height(30.dp)
-                                    .clip(shape = RoundedCornerShape(5.dp))
-                                    ,
-                                colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = ComponentBlue
-                                )
-                                ) {
-                                Text(text = "Publish", color = White)
-                            }}
+}
                             Spacer(modifier = Modifier.height(10.dp))
                         }
-
                         }
                     }
                 }
@@ -280,21 +298,24 @@ fun CustomPublicationDialog(value: String, setShowDialog: (Boolean) -> Unit, set
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = "Create Publication",
-                            style = TextStyle(
-                                fontSize = 24.sp,
-                                fontFamily = FontFamily.Default,
-                                fontWeight = FontWeight.Bold
+                        Column() {
+                            Text(
+                                text = "Create Publication",
+                                style = TextStyle(
+                                    fontSize = 24.sp,
+                                    fontFamily = FontFamily.Default,
+                                    fontWeight = FontWeight.Bold
+                                )
                             )
-                        )
-                        Text(
-                            text = "(Add complementary data)",
-                            style = TextStyle(
-                                fontSize = 14.sp,
-                                fontFamily = FontFamily.Default,
+                            Text(
+                                text = "(Add complementary data)",
+                                style = TextStyle(
+                                    fontSize = 14.sp,
+                                    fontFamily = FontFamily.Default,
+                                )
                             )
-                        )
+                        }
+
                         Icon(
                             imageVector = Icons.Filled.Cancel,
                             contentDescription = "",
@@ -307,68 +328,76 @@ fun CustomPublicationDialog(value: String, setShowDialog: (Boolean) -> Unit, set
                     }
 
                     Spacer(modifier = Modifier.height(20.dp))
-
-
-                    TextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp)
-                            .border(
-                                BorderStroke(
-                                    width = 2.dp,
-                                    color = LightBlack
+                    Column() {
+                        Text(text = "Enter duration (in days)",color = Black, fontSize = 20.sp)
+                        TextField(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(45.dp)
+                                .border(
+                                    BorderStroke(
+                                        width = 2.dp,
+                                        color = LightBlack
+                                    ),
+                                    shape = RoundedCornerShape(8)
                                 ),
-                                shape = RoundedCornerShape(15)
+                            colors = TextFieldDefaults.textFieldColors(
+                                backgroundColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent
                             ),
-                        colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent
-                        ),
-                        placeholder = { Text(text = "Enter duration (in days)",color = LightBlack, fontSize = 20.sp) },
-                        value = Salaire.value,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        onValueChange = {
-                            Salaire.value = it
-                        })
+                            placeholder = {  },
+                            value = duree.value,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            onValueChange = {
+                                duree.value = it
+                            })
+                    }
+
 
                     Spacer(modifier = Modifier.height(20.dp))
+                    Column() {
+                        Text(text = "Enter Salary (in Fcfa)",color = Black, fontSize = 20.sp)
+                        TextField(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(45.dp)
+                                .border(
+                                    BorderStroke(
+                                        width = 2.dp,
+                                        color = LightBlack
+                                    ),
 
-                    TextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp)
-                            .border(
-                                BorderStroke(
-                                    width = 2.dp,
-                                    color = LightBlack
+                                    shape = RoundedCornerShape(8)
                                 ),
-
-                                shape = RoundedCornerShape(15)
+                            colors = TextFieldDefaults.textFieldColors(
+                                backgroundColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent
                             ),
-                        colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent
-                        ),
-                        placeholder = { Text(text = "Enter Salary (in Fcfa)",color = LightBlack, fontSize = 20.sp) },
-                        value = duree.value,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        onValueChange = {
-                            duree.value = it
-                        })
+                            value = Salaire.value,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            onValueChange = {
+                                Salaire.value = it
+                            })
+                    }
+
+
 
                     Spacer(modifier = Modifier.height(20.dp))
 
                     Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
                         Button(
                             onClick = {
+
                                 if (Salaire.value.isEmpty()) {
-                                    Salaire.value = "Field can not be empty"
+                                    Salaire.value = "Fill the infos"
                                     return@Button
-                                }else if(duree.value.isEmpty()){
-                                    duree.value = "Field can not be empty"
+                                }else if(duree.value.isEmpty()) {
+                                    duree.value = "Fill the infos"
                                     return@Button
+                                }else if(duree.value.toInt() > 30) {
+                                    duree.value = "Not more than 30 days"
                                 }else{
                                     addDataToFirebase(
                                         duree.value,
@@ -380,13 +409,13 @@ fun CustomPublicationDialog(value: String, setShowDialog: (Boolean) -> Unit, set
                                 }
 
                             },
-                            shape = RoundedCornerShape(50.dp),
+                            shape = RoundedCornerShape(8.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(50.dp),
+                                .height(45.dp),
                             colors = ButtonDefaults.buttonColors(backgroundColor = ComponentBlue)
                         ) {
-                            Text(text = "Save", fontWeight = FontWeight.Medium, fontFamily = FontFamily.Monospace)
+                            Text(text = "Save", fontWeight = FontWeight.Medium, fontFamily = FontFamily.Monospace, color = White, fontSize = 22.sp)
                         }
                     }
                 }
@@ -400,10 +429,11 @@ fun addDataToFirebase(
     Salaire: String,
     context: Context
 ) {
+    var randomNumber = (0..10000).random()
     val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-    val dbNeed: CollectionReference = db.collection("Users").document("$Email").collection("Recoms")
-    val recoms = Publication(Duree,Salaire)
-    dbNeed.add(recoms).addOnSuccessListener {
+    val dbPublic: DocumentReference = db.collection("Users").document("$Email").collection("Needs").document("$titre").collection("Publications").document("$randomNumber")
+    val publics = Publication(Duree,Salaire)
+    dbPublic.set(publics).addOnSuccessListener {
         Toast.makeText(
             context,
             "Your Publication has been saved added",
@@ -412,23 +442,10 @@ fun addDataToFirebase(
 
     }.addOnFailureListener { e ->
         Toast.makeText(context, "Fail to add publication \n$e", Toast.LENGTH_SHORT).show()
-    }
-
+}
 }
 
-private fun deleteDataFromFirebase(titre: String?, context: Context, navController: NavController) {
 
-    val db = FirebaseFirestore.getInstance();
-    db.collection("Users").document("$Email").collection("Needs").document("$titre").delete().addOnSuccessListener {
-        Toast.makeText(context, "Needd Deleted successfully..", Toast.LENGTH_SHORT).show()
-        navController.navigate(navController.currentDestination!!.id)
-    }.addOnFailureListener {
-        // on below line displaying toast message when
-        // we are not able to delete the course
-        Toast.makeText(context, "Fail to delete need..", Toast.LENGTH_SHORT).show()
-    }
-
-}
 
 /*                        Column(
                             Modifier

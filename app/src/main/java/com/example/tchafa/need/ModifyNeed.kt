@@ -177,8 +177,11 @@ fun NeedModifyViews( navController: NavController) {
                             .fillMaxWidth()){Text(text = "Title", color = Color.Black)}
                     OutlinedTextField(
                         value = Title.value,
-                        onValueChange = { Title.value = it },
+                        onValueChange = {
+                            Title.value = it
+                                        },
                         singleLine = true,
+                        placeholder =  { Text(text =title.toString(), color = LightBlack, fontSize = 12.sp ) },
                         modifier = Modifier
                             .fillMaxWidth(1f)
                             .height(49.dp),
@@ -195,9 +198,11 @@ fun NeedModifyViews( navController: NavController) {
                                 Modifier
                                     .fillMaxWidth()
                             ){Text(text = "Localisation", color = Color.Black)}
+                            var loc = localisation.toString()
                             OutlinedTextField(
                                 value = Localisation.value,
                                 onValueChange = { Localisation.value = it },
+                                placeholder = {Text(text = localisation.toString(), color = LightBlack, fontSize = 12.sp )},
                                 singleLine = true,
                                 modifier = Modifier
                                     .width(screenWidth / 2.6f)
@@ -217,6 +222,7 @@ fun NeedModifyViews( navController: NavController) {
                             OutlinedTextField(
                                 value = Sector.value,
                                 onValueChange = { Sector.value = it },
+                                placeholder = { Text(text =sector.toString(), color = LightBlack, fontSize = 12.sp )},
                                 singleLine = true,
                                 modifier = Modifier
                                     .width(screenWidth / 2.6f)
@@ -239,6 +245,7 @@ fun NeedModifyViews( navController: NavController) {
                     OutlinedTextField(
                         value = Description.value,
                         onValueChange = { Description.value = it },
+                        placeholder = { Text(text = description.toString(), color = LightBlack, fontSize = 12.sp )},
                         modifier = Modifier
                             .fillMaxWidth(1f)
                             .height(85.dp),
@@ -251,26 +258,33 @@ fun NeedModifyViews( navController: NavController) {
                     Spacer(modifier = Modifier.height(20.dp))
                 }
             }
-            Column(Modifier.fillMaxHeight().padding(start = 20.dp, end = 20.dp, bottom = 70.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                Modifier
+                    .fillMaxHeight()
+                    .padding(start = 20.dp, end = 20.dp, bottom = 70.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
                 Button(
                     onClick = {
                         if (TextUtils.isEmpty(Title.value.toString())) {
                             Toast.makeText(context, "Please enter job Title", Toast.LENGTH_SHORT).show()
+                            Title.value = title.toString()
                         } else if (TextUtils.isEmpty(Localisation.value.toString())) {
                             Toast.makeText(context, "Please enter job Localisation", Toast.LENGTH_SHORT)
                                 .show()
+                            Localisation.value = localisation.toString()
                         } else if (TextUtils.isEmpty(Sector.value.toString())) {
                             Toast.makeText(context, "Please enter job sector", Toast.LENGTH_SHORT)
                                 .show()
+                            Sector.value = sector.toString()
                         } else if (TextUtils.isEmpty(Description.value.toString())) {
                             Toast.makeText(context, "Please enter job Description", Toast.LENGTH_SHORT)
                                 .show()
+                            Description.value = Description.toString()
                         } else {
-                            addDataToFirebase(
-                                Description.value,
+                            updateDataToFirebase(
+                                Title.value,
                                 Localisation.value,
                                 Sector.value,
-                                Title.value,context
+                                Description.value,context
                             )
                             navController.popBackStack()
                         }

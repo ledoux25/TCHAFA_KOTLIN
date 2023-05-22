@@ -25,7 +25,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 fun SetupNavGraph(
     navController: NavHostController
 ){
-    NavHost(navController = navController, startDestination = Screen.NeedDetails.route)
+    NavHost(navController = navController, startDestination = Screen.NeedHome.route)
     {
         composable(
             route = Screen.LoginHome.route
