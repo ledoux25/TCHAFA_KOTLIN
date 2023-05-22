@@ -4,19 +4,24 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tchafa.ui.theme.*
@@ -437,103 +442,217 @@ fun NeedDetail() {
 
 
 
-
-/*@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+/*
+@Preview(showBackground = true)
 @Composable
-fun NeedDetails() {
-    Scaffold(
-        Modifier.fillMaxSize(),
-        backgroundColor = Color.Green,
+fun preview()
+{
+
+}
+
+@Composable
+fun SignupScreen(
+    //navController: NavController
+) {
+    //val imeState = rememberImeState()
+    val scrollState = rememberScrollState()
+    val context = LocalContext.current
+
+    Surface(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState),
     ) {
-        Column(Modifier.fillMaxSize()) {
-            Text(
-                text = "Tchafa",
-                 fontSize = 24.sp,
-                 fontFamily = SecularOne,
-                 fontWeight = FontWeight.Normal,
-                 style = MaterialTheme.typography.h6
+        /*LaunchedEffect(key1 = imeState.value) {
+            if (imeState.value) {
+                scrollState.scrollTo(scrollState.maxValue)
+            }
+        }*/
+        val configuration = LocalConfiguration.current
+        val screenHeight = configuration.screenHeightDp.dp
+        val screenWidth = configuration.screenWidthDp.dp
+
+
+        Column(
+            Modifier
+                .fillMaxSize(),
+            //.background(Background),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.signup),
+                contentDescription = "Sign up illustration",
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 24.dp)
-                    .wrapContentWidth(align = Alignment.CenterHorizontally)
+                    .padding(top = 20.dp)
+                    .size(250.dp)
             )
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(250.dp),
-                contentAlignment = Alignment.TopCenter
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .padding(top = 50.dp)
-                        .background(
-                            color = Color.White,
-                            shape = RoundedCornerShape(
-                                topStart = 16.dp,
-                                topEnd = 16.dp,
-                                bottomStart = 0.dp,
-                                bottomEnd = 0.dp
-                            )
-                        )
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_pic_profile),
-                            contentDescription = "Profile Picture",
-                            modifier = Modifier
-                                .padding(start = 16.dp, top = 16.dp, bottom = 16.dp)
-                                .size(80.dp)
-                                .clip(RoundedCornerShape(16.dp))
-                        )
-                        Column(
-                            modifier = Modifier.padding(16.dp)
-                        ) {
-                            Text(
-                                text = "Nom d'utilisateur",
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                text = "Date",
-                                fontSize = 16.sp,
-                                color = Color.Gray
-                            )
-                        }
-                    }
-                }
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = "Texte 1",
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(16.dp)
-                )
-                Text(
-                    text = "Texte 2",
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(16.dp)
-                )
-            }
+            Text(
+                text = "CREATE YOUR ACCOUNT",
+                style = MaterialTheme.typography.subtitle1,
+                modifier = Modifier.padding(bottom = 35.dp)
+            )
+
             Column(
-                modifier = Modifier.fillMaxWidth()
+                Modifier
+                    .width(screenWidth + 3.dp)
+                    .clip(shape = RoundedCornerShape(20.dp, 20.dp, 0.dp, 0.dp))
+                    .background(Color.White)
+                    .height((screenHeight / 2) + 20.dp)
+                    .padding(top = 25.dp),
+                verticalArrangement = Arrangement.SpaceEvenly,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "Texte 3",
-                    modifier = Modifier.padding(16.dp)
+
+                var lastname by remember {
+                    mutableStateOf("")
+                }
+
+                var email by remember {
+                    mutableStateOf("")
+                }
+                var password by remember {
+                    mutableStateOf("")
+                }
+
+                OutlinedTextField(
+                    value = email,
+                    onValueChange = { newText ->
+                        email = newText
+                    },
+                    modifier = Modifier.height(60.dp),
+                    leadingIcon = {
+                        Image(
+                            painter = painterResource(id = R.drawable.email),
+                            contentDescription = "Email"
+                        )
+                    },
+                    shape = RoundedCornerShape(15.dp),
+                    label = { Text(text = "Email", color = Bordeaux) },
+                    textStyle = TextStyle(
+                        color = Color.Black,
+                        fontSize = 22.sp,
+                        fontFamily = FontFamily.Monospace
+                    ),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color.Blue,
+                        unfocusedBorderColor = Color.Black
+                    )
                 )
-                Text(
-                    text = "Bouton",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
+
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = { newText ->
+                        password = newText
+                    },
+                    leadingIcon = {
+                        Image(
+                            painter = painterResource(id = R.drawable.password),
+                            contentDescription = "PassWord"
+                        )
+                    },
+                    shape = RoundedCornerShape(15.dp),
+                    modifier = Modifier.height(60.dp),
+
+                    label = { Text(text = "Password", color = Color.Black) },
+                    textStyle = TextStyle(
+                        color = Color.Black,
+                        fontSize = 22.sp,
+                        fontFamily = FontFamily.Monospace
+                    ),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color.Blue,
+                        unfocusedBorderColor = Color.Black
+                    )
                 )
+
+                OutlinedTextField(
+                    value = lastname,
+                    onValueChange = { newText ->
+                        lastname = newText
+                    },
+                    leadingIcon = {
+                        Image(
+                            painter = painterResource(id = R.drawable.password),
+                            contentDescription = "ConfirmPassWord"
+                        )
+                    },
+                    shape = RoundedCornerShape(15.dp),
+                    modifier = Modifier.height(60.dp),
+
+                    label = { Text(text = "Confirm Password", color = Color.Black) },
+                    textStyle = TextStyle(
+                        color = Color.Black,
+                        fontSize = 22.sp,
+                        fontFamily = FontFamily.Monospace
+                    ),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color.Blue,
+                        unfocusedBorderColor = Color.Black
+                    )
+                )
+
+                Button(
+                    onClick = {
+                        /*if (password.isEmpty() || lastname.isEmpty() || email.isEmpty()) {
+                            Toast.makeText(context, "Fill all the blank spaces", Toast.LENGTH_SHORT)
+                        } else if (password.length < 6) {
+                            Toast.makeText(
+                                context,
+                                "Password Should atleast have 6 characters",
+                                Toast.LENGTH_SHORT
+                            )
+                        } else if (password != lastname) {
+                            Toast.makeText(
+                                context,
+                                "Password Validation Failed",
+                                Toast.LENGTH_SHORT
+                            )
+                        } else {
+                            lateinit var auth: FirebaseAuth
+                            auth = Firebase.auth
+
+                            auth.createUserWithEmailAndPassword(email, password)
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        // Sign in success, update UI with the signed-in user's information
+                                        Log.d(ContentValues.TAG, "createUserWithEmail:success")
+                                        navController.navigate(route = Screen.Login.route)
+                                        val user = auth.currentUser
+                                    } else {
+                                        // If sign in fails, display a message to the user.
+                                        Log.w(ContentValues.TAG, "createUserWithEmail:failure", task.exception)
+                                        Toast.makeText(
+                                            context,
+                                            "Authentication failed.",
+                                            Toast.LENGTH_SHORT,
+                                        ).show()
+                                    }
+                                }
+                        }*/
+                    },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Blue),
+                    shape = RoundedCornerShape(35),
+                    modifier = Modifier
+                        .width(125.dp)
+                        .padding(top = 10.dp)
+                ) {
+                    Text(text = "SignUp", color = Color.Black)
+                }
+
+                Button(
+                    onClick = { /* Action du troisième bouton */ },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                    elevation = null
+                ) {
+                    Text(
+                        text = " I Already Have An Account",
+                        color = Color.Black,
+                        fontSize = 12.sp,
+                        fontFamily = FontFamily.Monospace,
+                        modifier = Modifier.padding(bottom = 15.dp)
+                    )
+                }
             }
         }
     }

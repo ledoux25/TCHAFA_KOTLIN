@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tchafa.Publication.Add_Publication
+import com.example.tchafa.start.SignUpScreen
 import com.example.tchafa.ui.theme.LightGreen
 import com.example.tchafa.ui.theme.SecularOne
 
@@ -29,7 +30,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-            NeedDetail()
+            SignUpScreen()
 
         }
     }
