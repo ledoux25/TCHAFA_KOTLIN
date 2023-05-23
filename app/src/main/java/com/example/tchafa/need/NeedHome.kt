@@ -50,6 +50,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import java.sql.RowId
+import kotlin.random.Random
 
 public var needIndex : Int? = null
 var titre :String? = ""
@@ -88,7 +89,6 @@ fun NeedHomeScreen(navController: NavController){
                     val c: Need? = d.toObject(Need::class.java)
 
                     needList.add(c)
-
                 }
             } else {
 
@@ -247,8 +247,13 @@ fun NeedHomeScreen(navController: NavController){
                                             )}
                                         }
                                         Button(onClick = {
-                                            showDialog.value = true
-                                            needIndex = index },
+                                            titre = ""
+                                            titre = needList[index]?.Title
+                                            if (titre != "") {
+                                                titre = needList[index]?.Title
+                                                showDialog.value = true
+                                                needIndex = index
+                                            } },
                                             modifier = Modifier
                                                 .padding(end = 20.dp)
                                                 .width(80.dp)
@@ -280,6 +285,39 @@ fun CustomPublicationDialog(value: String, setShowDialog: (Boolean) -> Unit, set
     val duree = remember { mutableStateOf(value) }
     val Salaire = remember { mutableStateOf(value) }
     val context = LocalContext.current
+    var db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    val docList = ArrayList<Map<String, Any>>()
+
+    val docRef = db.collection("Users").document("$Email").collection("Needs").document("$titre")
+
+    docRef.get().addOnSuccessListener { documentSnapshot ->
+        if (documentSnapshot.exists()) {
+            val docData = documentSnapshot.data
+
+            title = docData?.get("title").toString()
+            localisation = docData?.get("localisation").toString()
+            sector = docData?.get("sector").toString()
+            description = docData?.get("description").toString()
+
+
+
+            docList.add(docData!!)
+        } else {
+            // Document does not exist
+        }
+    }.addOnFailureListener { exception ->
+        // Handle exceptions here
+    }
+        // if we don't get any data or any error
+        // we are displaying a toast message
+        // that we donot get any data
+        .addOnFailureListener {
+            Toast.makeText(
+                context,
+                "Fail to get the data.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
 
 
 
@@ -389,7 +427,7 @@ fun CustomPublicationDialog(value: String, setShowDialog: (Boolean) -> Unit, set
                     Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
                         Button(
                             onClick = {
-
+                                var randomNumber = Random.nextInt(1,1000000)
                                 if (Salaire.value.isEmpty()) {
                                     Salaire.value = "Fill the infos"
                                     return@Button
@@ -400,8 +438,14 @@ fun CustomPublicationDialog(value: String, setShowDialog: (Boolean) -> Unit, set
                                     duree.value = "Not more than 30 days"
                                 }else{
                                     addDataToFirebase(
+                                        title.toString(),
+                                        localisation.toString(),
+                                        sector.toString(),
+                                        description.toString(),
                                         duree.value,
                                         Salaire.value,
+                                        Email.toString(),
+                                        randomNumber,
                                         context
                                     )
                                     setValue(duree.value)
@@ -425,14 +469,19 @@ fun CustomPublicationDialog(value: String, setShowDialog: (Boolean) -> Unit, set
 }
 
 fun addDataToFirebase(
+    Title :String,
+    Localisation :String,
+    Secteur : String,
+    Description :String,
     Duree: String,
     Salaire: String,
+    PublishedBy: String,
+    randomNumber :Int,
     context: Context
 ) {
-    var randomNumber = (0..10000).random()
     val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-    val dbPublic: DocumentReference = db.collection("Users").document("$Email").collection("Needs").document("$titre").collection("Publications").document("$randomNumber")
-    val publics = Publication(Duree,Salaire)
+    val dbPublic: DocumentReference = db.collection("Users").document("$Email").collection("Publications").document("$randomNumber")
+    val publics = Publication(randomNumber,PublishedBy,Title,Localisation,Secteur,Description,Duree,Salaire)
     dbPublic.set(publics).addOnSuccessListener {
         Toast.makeText(
             context,
@@ -442,9 +491,31 @@ fun addDataToFirebase(
 
     }.addOnFailureListener { e ->
         Toast.makeText(context, "Fail to add publication \n$e", Toast.LENGTH_SHORT).show()
-}
-}
 
+    }
+    val dbPublics: DocumentReference =
+        db.collection("Publications").document("$randomNumber")
+    val public = Publication(
+        randomNumber,
+        PublishedBy,
+        Title,
+        Localisation,
+        Secteur,
+        Description,
+        Duree,
+        Salaire
+    )
+    dbPublics.set(public).addOnSuccessListener {
+        Toast.makeText(
+            context,
+            "Your Publication has been saved added",
+            Toast.LENGTH_SHORT
+        ).show()
+
+    }.addOnFailureListener { e ->
+        Toast.makeText(context, "Fail to add publication \n$e", Toast.LENGTH_SHORT).show()
+    }
+}
 
 
 /*                        Column(

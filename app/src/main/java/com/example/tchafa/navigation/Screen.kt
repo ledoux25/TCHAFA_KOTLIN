@@ -19,12 +19,18 @@ sealed class Screen(val route: String ) {
 
     object RecommendationHome : Screen (route = "recom_screen")
 
-    object PublicationHome : Screen (route = "publi_screen")
+    object publicationHome : Screen (route = "publi_screen")
 
     object NeedHome : Screen (route = "NeedHome_screen")
 
     object LoginHome : Screen (route = "login_home")
     object NeedDetails: Screen (route = "need_details")
+
+    object PublicationDetail: Screen (route = "publication_detail_screen")
+
+    object OLPublications: Screen (route = "publication_detail_screen")
+
+
 
 
 

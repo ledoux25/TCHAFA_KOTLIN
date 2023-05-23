@@ -1,5 +1,6 @@
 package com.example.tchafa.publication
 
+import android.content.ContentValues.TAG
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -11,20 +12,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Details
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Pageview
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -37,15 +32,15 @@ import com.example.tchafa.data.Need
 import com.example.tchafa.data.Publication
 import com.example.tchafa.navigation.Screen
 import com.example.tchafa.need.CustomPublicationDialog
-import com.example.tchafa.need.needIndex
-import com.example.tchafa.need.titre
 import com.example.tchafa.start.Email
 import com.example.tchafa.ui.theme.*
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
-var Identifiant :Int? = null
 @Composable
-fun publicationHome(navController: NavController){
+fun OLPublications(navController: NavController){
     val context = LocalContext.current
 
     var search by remember {
@@ -67,8 +62,12 @@ fun publicationHome(navController: NavController){
             Log.i("HomePage","HomePage : $it")
         }
     /*-------------------------------------------*/
-    var db: FirebaseFirestore = FirebaseFirestore.getInstance()
-    db.collection("Users").document("$Email").collection("Publications").get()
+    val db = Firebase.firestore
+    val collectionRef = db.collection("Publications")
+    val maListe = mutableListOf<DocumentSnapshot>()
+
+    collectionRef.whereNotEqualTo("publishedBy", "$Email")
+        .get()
         .addOnSuccessListener { queryDocumentSnapshots ->
             if (!queryDocumentSnapshots.isEmpty) {
 
@@ -77,26 +76,15 @@ fun publicationHome(navController: NavController){
                     val c: Publication? = d.toObject(Publication::class.java)
 
                     needList.add(c)
-
                 }
             } else {
 
                 Toast.makeText(
                     context,
-                    "No publication found make one",
+                    "No publication found comeback later",
                     Toast.LENGTH_SHORT
                 ).show()
             }
-        }
-        // if we don't get any data or any error
-        // we are displaying a toast message
-        // that we donot get any data
-        .addOnFailureListener {
-            Toast.makeText(
-                context,
-                "Fail to get the data.",
-                Toast.LENGTH_SHORT
-            ).show()
         }
 /*---------------------------------------------*/
     Column(
@@ -112,22 +100,15 @@ fun publicationHome(navController: NavController){
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 15.dp, vertical = 10.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+                    .padding(horizontal = 15.dp, vertical = 10.dp)) {
                 Image(painter = painterResource(R.drawable.back_arrow),
                     contentDescription = "back",
                     modifier = Modifier
                         .size(30.dp)
                         .clickable { navController.popBackStack() })
-                Image(painter = painterResource(R.drawable.plus),
-                    contentDescription = "sort",
-                    modifier = Modifier
-                        .padding(start = 20.dp)
-                        .rotate(90f)
-                        .clickable { navController.navigate(Screen.NeedHome.route) }
-                        .size(30.dp))
             }
 
-            Text(text = "My Publications", color = TextBlue, fontSize = 35.sp, fontWeight = FontWeight.Medium, fontFamily = FontFamily.Monospace)
+            Text(text = "Publications", color = TextBlue, fontSize = 35.sp, fontWeight = FontWeight.Medium, fontFamily = FontFamily.Monospace)
         }
         Row(
             Modifier
@@ -241,8 +222,8 @@ fun publicationHome(navController: NavController){
                                 .fillMaxWidth()
                                 .padding(vertical = 8.dp), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
                             needList[index]?.salaire?.let {
-                                Text(text = it, fontSize = 29.sp, color = Black)
-                                Text(text = "FCFA", fontSize = 20.sp, color = Black,modifier = Modifier.padding(start = 3.dp))
+                                Text(text = it, fontSize = 29.sp, color = Color.Black)
+                                Text(text = "FCFA", fontSize = 20.sp, color = Color.Black,modifier = Modifier.padding(start = 3.dp))
                             }
                         }
                         Row(
@@ -268,13 +249,9 @@ fun publicationHome(navController: NavController){
                                 Image(painter = painterResource(id = R.drawable.details), contentDescription = "details ")
                             }
                             Button(onClick = {
+                                deleteDataFromFirebase(Identifiant, context)
                                 Identifiant = null
-                                Identifiant = needList[index]?.id
-                                if (Identifiant != null) {
-                                    deleteDataFromFirebase(Identifiant, context)
-                                    Identifiant = null
-                                    navController.navigate(Screen.publicationHome.route)
-                                }
+                                navController.navigate(Screen.publicationHome.route)
                             },
                                 modifier = Modifier
                                     .width(100.dp)
@@ -282,10 +259,10 @@ fun publicationHome(navController: NavController){
                                     .clip(shape = RoundedCornerShape(5.dp))
                                 ,
                                 colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = Red
+                                    backgroundColor = ComponentBlue
                                 )
                             ) {
-                                Text(text = "Delete", color = White)
+                                Text(text = "Candidate", color = White)
                             }
                         }
                     }

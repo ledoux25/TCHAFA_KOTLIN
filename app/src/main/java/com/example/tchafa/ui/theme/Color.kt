@@ -25,7 +25,7 @@ val BackgroundGray = Color(0xFFF0E9E9)
 val PrimaryGreen = Color(0xFF7FD883)
 val GreenIcon = Color(0xFF0466c8)
 val TextBlack = Color(0x69000000)
-    val BackgroundBlack = Color(0xA000000)
+val BackgroundBlack = Color(0xA000000)
 
 
 

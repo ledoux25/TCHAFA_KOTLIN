@@ -12,6 +12,9 @@ import com.example.tchafa.need.NeedHomeScreen
 import com.example.tchafa.need.NeedModifyViews
 import com.example.tchafa.profile.ProfileForm
 import com.example.tchafa.profile.ProfileScreen
+import com.example.tchafa.publication.OLPublications
+import com.example.tchafa.publication.PublicationDetail
+import com.example.tchafa.publication.publicationHome
 import com.example.tchafa.recommendations.PublicationHome
 import com.example.tchafa.recommendations.RecommendationHome
 import com.example.tchafa.start.LoginHome
@@ -25,7 +28,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 fun SetupNavGraph(
     navController: NavHostController
 ){
-    NavHost(navController = navController, startDestination = Screen.NeedHome.route)
+    NavHost(navController = navController, startDestination = Screen.OLPublications.route)
     {
         composable(
             route = Screen.LoginHome.route
@@ -96,14 +99,14 @@ fun SetupNavGraph(
             RecommendationHome(navController = navController)
         }
         composable(
-            route = Screen.PublicationHome.route
+            route = Screen.publicationHome.route
         ){
-            PublicationHome(navController = navController)
+            publicationHome(navController = navController)
         }
         composable(
             route = NavigationItems.Add.route
         ){
-            PublicationHome(navController = navController)
+            publicationHome(navController = navController)
         }
 
         composable(
@@ -122,6 +125,16 @@ fun SetupNavGraph(
             route = Screen.NeedDetails.route
         ){
             NeedDetails(navController = navController)
+        }
+        composable(
+            route = Screen.PublicationDetail.route
+        ){
+            PublicationDetail(navController = navController)
+        }
+        composable(
+            route = Screen.OLPublications.route
+        ){
+            OLPublications(navController = navController)
         }
 
     }
