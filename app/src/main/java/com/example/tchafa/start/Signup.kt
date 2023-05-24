@@ -4,12 +4,20 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tchafa.R
@@ -25,17 +33,14 @@ fun SignUpScreen() {
     var isPasswordVisible by remember { mutableStateOf(false) }
     Scaffold(
         topBar = {
-
-                    Image(
-                    painter = painterResource(id = R.drawable.blue_back),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clickable(onClick = { /* back */ })
-                            .padding(26.dp, 12.dp)
-                            .size(35.dp)
-                )
-
+            IconButton(onClick = {/**/},
+                modifier = Modifier .padding(16.dp, 12.dp)
+                    ) {
+                Image( painter = painterResource(id = R.drawable.blue_back), contentDescription = "Clear password")
+            }
         },
+
+
         content = {
 
             Text(
@@ -74,7 +79,8 @@ fun SignUpScreen() {
 
             Column(
                 modifier = Modifier
-                    .padding(35.dp, 270.dp),
+                    .padding(35.dp, 270.dp)
+                .verticalScroll(rememberScrollState()),
 
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -82,16 +88,14 @@ fun SignUpScreen() {
 
 
 
-                Column(
-                    modifier = Modifier.fillMaxWidth()) {
 
-                    Spacer(Modifier.height(16.dp))
                         Text(text = "Email",
                                 modifier = Modifier
-                                .fillMaxWidth()
-                            .padding(horizontal = 16.dp))
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp))
                         OutlinedTextField(
                             value = email,
+
                             onValueChange = { email = it },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -104,18 +108,52 @@ fun SignUpScreen() {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 16.dp))
-                        OutlinedTextField(
+
+                val icon = if (isPasswordVisible) // Gerer l'etat de l'icon de l'oeil
+                    painterResource(id = R.drawable.baseline_visibility_24) // si le passwordVisibility est sur true
+                else
+                    painterResource(id = R.drawable.visibility_off) // Si le passwordvisibility est sur false
+
+
+                OutlinedTextField(
                             value = password,
                             onValueChange = { password = it },
-                            modifier = Modifier.fillMaxWidth()
+                            textStyle = MaterialTheme.typography.h6,
+                            singleLine = true,
+                            trailingIcon = {
+                                IconButton(onClick = {
+                                    isPasswordVisible = !isPasswordVisible
+                                }) {
+                                    Icon( painter = icon, contentDescription = "Clear password"/*stringResource(R.string.visibilityicon)*/)
+                                }
+                            },
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Password
+                            ),
+                    visualTransformation = if (isPasswordVisible) VisualTransformation.None
+                    else PasswordVisualTransformation(),
+
+                            isError = password.length < 8,
+                            colors = TextFieldDefaults.textFieldColors(
+                                backgroundColor = Color.White,
+                                focusedIndicatorColor = Color.Blue,
+                                unfocusedIndicatorColor = Color.Blue
+                            ),
+                                    modifier = Modifier.fillMaxWidth()
                                 .padding(horizontal = 16.dp)
                         )
+                if (password.length < 8){
+                    Text(text = "Le mot de passe doit comporter au moins 8 caracteres",
+                    color = MaterialTheme.colors.error
+                    )
+                }
 
 
                     Spacer(Modifier.height(19.dp))
                     Button(
                         onClick = { /* Handle sign up button click */ },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .padding(horizontal = 16.dp),
                         colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
                     ) {
@@ -126,7 +164,7 @@ fun SignUpScreen() {
                     }
                 }
 
-                }
+
 
         }
     )
