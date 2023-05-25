@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,6 +51,16 @@ fun NeedDetails(navController: NavController){
     val context = LocalContext.current
     var db: FirebaseFirestore = FirebaseFirestore.getInstance()
     val docList = ArrayList<Map<String, Any>>()
+
+    val showDialog =  remember { mutableStateOf(false) }
+
+    if(showDialog.value)
+        CustomPublicationDialog(value = "", setShowDialog = {
+            showDialog.value = it
+        }) {
+            Log.i("HomePage","HomePage : $it")
+        }
+
     titre = titre
     val docRef = db.collection("Users").document("$Email").collection("Needs").document("$titre")
 
@@ -216,7 +228,9 @@ fun NeedDetails(navController: NavController){
         Spacer(modifier = Modifier.height(35.dp))
         Row(Modifier.width(screenWidth-60.dp), horizontalArrangement = Arrangement.SpaceBetween) {
             Button(
-                onClick = {},
+                onClick = {
+                        showDialog.value = true
+                },
                 modifier = Modifier
                     .width(screenWidth/2.5f)
                     .height(45.dp)

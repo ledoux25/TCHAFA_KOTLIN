@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.tchafa.homescreen.homeScreen
+import com.example.tchafa.log.homeScreen
 import com.example.tchafa.start.Login
 import com.example.tchafa.need.NeedDetailViews
 import com.example.tchafa.need.NeedDetails
@@ -12,6 +12,7 @@ import com.example.tchafa.need.NeedHomeScreen
 import com.example.tchafa.need.NeedModifyViews
 import com.example.tchafa.profile.ProfileForm
 import com.example.tchafa.profile.ProfileScreen
+import com.example.tchafa.publication.OLPublicationDetail
 import com.example.tchafa.publication.OLPublications
 import com.example.tchafa.publication.PublicationDetail
 import com.example.tchafa.publication.publicationHome
@@ -28,12 +29,17 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 fun SetupNavGraph(
     navController: NavHostController
 ){
-    NavHost(navController = navController, startDestination = Screen.OLPublications.route)
+    NavHost(navController = navController, startDestination = Screen.HomeScreen.route)
     {
         composable(
             route = Screen.LoginHome.route
         ){
             LoginHome(navController = navController)
+        }
+        composable(
+            route = Screen.HomeScreen.route
+        ){
+            homeScreen(navController = navController)
         }
         composable(
             route = Screen.Login.route
@@ -62,39 +68,15 @@ fun SetupNavGraph(
         ){
             NeedHomeScreen(navController = navController)
         }
+
         composable(
-            route = NavigationItems.Search.route
+            route = Screen.ProfileScreen.route
         ){
-            NeedHomeScreen(navController = navController)
+            ProfileScreen(navController = navController)
         }
 
         composable(
-            route = Screen.HomeScreen.route
-        ){
-            homeScreen(navController = navController)
-        }
-        composable(
-            route = NavigationItems.Home.route
-        ){
-            homeScreen(navController = navController)
-        }
-        composable(
-            route = NavigationItems.Profile.route
-        ){
-           ProfileScreen(navController = navController)
-        }
-        composable(
-            route = NavigationItems.Add.route
-        ){
-            PublicationHome(navController = navController)
-        }
-        composable(
-            route = Screen.ProfileForm.route
-        ){
-            ProfileForm(navController = navController)
-        }
-        composable(
-            route = NavigationItems.Notifications.route
+            route = Screen.RecommendationHome.route
         ){
             RecommendationHome(navController = navController)
         }
@@ -102,17 +84,6 @@ fun SetupNavGraph(
             route = Screen.publicationHome.route
         ){
             publicationHome(navController = navController)
-        }
-        composable(
-            route = NavigationItems.Add.route
-        ){
-            publicationHome(navController = navController)
-        }
-
-        composable(
-            route = NavigationItems.Notifications.route
-        ){
-            RecommendationHome(navController = navController)
         }
 
         composable(
@@ -126,15 +97,29 @@ fun SetupNavGraph(
         ){
             NeedDetails(navController = navController)
         }
+
         composable(
             route = Screen.PublicationDetail.route
         ){
             PublicationDetail(navController = navController)
         }
+
         composable(
             route = Screen.OLPublications.route
         ){
             OLPublications(navController = navController)
+        }
+
+        composable(
+            route = Screen.OLPublicationsDetail.route
+        ){
+            OLPublicationDetail(navController = navController)
+        }
+
+        composable(
+            route = Screen.ProfileForm.route
+        ){
+            ProfileForm(navController = navController)
         }
 
     }

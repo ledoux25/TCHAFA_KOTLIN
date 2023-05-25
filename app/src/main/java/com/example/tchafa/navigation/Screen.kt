@@ -12,7 +12,7 @@ sealed class Screen(val route: String ) {
 
     object NewPublicationScreen : Screen (route = "new_pup_screen")
 
-    object ProfileForm : Screen (route = "profile_form")
+    object ProfileScreen: Screen (route = "profile_screen")
 
     object NeedModifyView : Screen (route = "modify_need")
 
@@ -28,7 +28,13 @@ sealed class Screen(val route: String ) {
 
     object PublicationDetail: Screen (route = "publication_detail_screen")
 
-    object OLPublications: Screen (route = "publication_detail_screen")
+    object OLPublications: Screen (route = "online_publication_screen")
+
+    object OLPublicationsDetail: Screen (route = "online_publication_detail_screen")
+
+    object ProfileForm: Screen (route = "profile_form_screen")
+
+
 
 
 

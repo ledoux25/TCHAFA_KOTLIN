@@ -39,6 +39,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
+
+var publishedBy :String? =""
 @Composable
 fun OLPublications(navController: NavController){
     val context = LocalContext.current
@@ -161,20 +163,26 @@ fun OLPublications(navController: NavController){
                         Row(
                             Modifier
                                 .fillMaxWidth()
-                                .padding(top = 8.dp, bottom = 0.dp, start = 38.dp)){
-                            Image(painter = painterResource(id = R.drawable.no_image), contentDescription ="no image", modifier = Modifier.size(30.dp) )
-                            needList[index]?.Title?.let{
-                                Text(text = it, fontSize = 30.sp, color = TextBlue,modifier = Modifier.padding(start = 8.dp)
-                                )
+                                .padding(top = 10.dp, bottom = 0.dp, start = 10.dp)){
+                            Row(Modifier.background(LightGray).size(70.dp).clip(shape = RoundedCornerShape(8.dp)), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+                                Image(painter = painterResource(id = R.drawable.no_image), contentDescription ="no image", modifier = Modifier.size(30.dp) )
                             }
-                        }
-                        Spacer(modifier = Modifier.height(7.dp))
-                        Row{
-                            Row(verticalAlignment = Alignment.Bottom){
+                            Column() {
+                                needList[index]?.Title?.let{
+                                    Text(text = it, fontSize = 30.sp, color = TextBlue,modifier = Modifier.padding(start = 8.dp)
+                                    )
+                                }
+                                needList[index]?.salaire?.let {
+                                    Row(Modifier.padding(start = 9.dp),verticalAlignment = Alignment.CenterVertically) {
+                                        Text(text = it, fontSize = 23.sp, color = Color.Black)
+                                        Text(text = "FCFA", fontSize = 20.sp, color = Color.Black,modifier = Modifier.padding(start = 3.dp))
+                                    }
+
+                                }
                                 Row(
                                     Modifier
                                         .width(screenWidth - 70.dp)
-                                        .padding(start = 15.dp), horizontalArrangement = Arrangement.Center)
+                                        .padding(start = 13.dp))
                                 {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         Image(
@@ -206,26 +214,14 @@ fun OLPublications(navController: NavController){
                                                     color = TextBlack,
                                                     modifier = Modifier.padding(start = 4.dp),
                                                     fontSize = 15.sp
-
-
-
                                                 )
                                             }
                                         }
-
                                     }
                                 }
                             }
                         }
-                        Row(
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 8.dp), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
-                            needList[index]?.salaire?.let {
-                                Text(text = it, fontSize = 29.sp, color = Color.Black)
-                                Text(text = "FCFA", fontSize = 20.sp, color = Color.Black,modifier = Modifier.padding(start = 3.dp))
-                            }
-                        }
+                        Spacer(modifier = Modifier.height(10.dp))
                         Row(
                             Modifier
                                 .fillMaxWidth()
@@ -234,7 +230,7 @@ fun OLPublications(navController: NavController){
                                 Identifiant = needList[index]?.id
                                 if (Identifiant != null) {
                                     Identifiant = needList[index]?.id
-                                    navController.navigate(route = Screen.PublicationDetail.route)
+                                    navController.navigate(route = Screen.OLPublicationsDetail.route)
                                 } },
                                 modifier = Modifier
                                     .padding(end = 40.dp)
@@ -248,10 +244,13 @@ fun OLPublications(navController: NavController){
                             ) {
                                 Image(painter = painterResource(id = R.drawable.details), contentDescription = "details ")
                             }
+
                             Button(onClick = {
-                                deleteDataFromFirebase(Identifiant, context)
-                                Identifiant = null
-                                navController.navigate(Screen.publicationHome.route)
+                                publishedBy = needList[index]?.PublishedBy
+                                if (publishedBy != "") {
+                                    publishedBy = needList[index]?.PublishedBy
+                                    addDataToFirebase(Email.toString(),context )
+                                }
                             },
                                 modifier = Modifier
                                     .width(100.dp)

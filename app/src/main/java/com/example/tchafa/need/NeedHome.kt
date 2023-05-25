@@ -39,9 +39,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.tchafa.R
+import com.example.tchafa.bar.bottomNav
 import com.example.tchafa.data.Need
 import com.example.tchafa.data.Publication
 import com.example.tchafa.data.Recommendation
+import com.example.tchafa.log.Content
+import com.example.tchafa.log.TopBar
 import com.example.tchafa.navigation.Screen
 import com.example.tchafa.recommendations.CustomDialog
 import com.example.tchafa.start.Email
@@ -56,7 +59,7 @@ public var needIndex : Int? = null
 var titre :String? = ""
 
 @Composable
-@SuppressLint("UnrememberedMutableState")
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 fun NeedHomeScreen(navController: NavController){
     val context = LocalContext.current
 
@@ -110,172 +113,178 @@ fun NeedHomeScreen(navController: NavController){
             ).show()
         }
 /*---------------------------------------------*/
-    Column(
-        Modifier
-            .fillMaxSize())
-    {
-        Column(
+
+    Scaffold(
+        topBar = { /*TODO*/},
+        content = {     Column(
             Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+                .fillMaxSize())
+        {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp, vertical = 10.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Image(painter = painterResource(R.drawable.back_arrow),
+                        contentDescription = "back",
+                        modifier = Modifier
+                            .size(30.dp)
+                            .clickable { navController.popBackStack() })
+                    Image(painter = painterResource(R.drawable.plus),
+                        contentDescription = "sort",
+                        modifier = Modifier
+                            .padding(start = 20.dp)
+                            .rotate(90f)
+                            .clickable { navController.navigate("need_detail_screen") }
+                            .size(30.dp))
+                }
+
+                Text(text = "My Needs", color = TextBlue, fontSize = 35.sp, fontWeight = FontWeight.Medium, fontFamily = FontFamily.Monospace)
+            }
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 15.dp, vertical = 10.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-                Image(painter = painterResource(R.drawable.back_arrow),
-                    contentDescription = "back",
-                    modifier = Modifier
-                        .size(30.dp)
-                        .clickable { navController.popBackStack() })
-                Image(painter = painterResource(R.drawable.plus),
-                    contentDescription = "sort",
-                    modifier = Modifier
-                        .padding(start = 20.dp)
-                        .rotate(90f)
-                        .clickable { navController.navigate("need_detail_screen") }
-                        .size(30.dp))
-            }
-
-            Text(text = "My Needs", color = TextBlue, fontSize = 35.sp, fontWeight = FontWeight.Medium, fontFamily = FontFamily.Monospace)
-        }
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp,),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        )
-        {
-
-            TextField(
-                value = search,
-                onValueChange = { newText -> search = newText },
-                modifier = Modifier
-                    .padding(bottom = 25.dp, top = 30.dp, end = 20.dp, start = 20.dp)
-                    .height(46.dp)
-                    .width(screenWidth - 40.dp)
-                    .border(1.dp, color = LightBlack, shape = RoundedCornerShape(10.dp)),
-                leadingIcon = {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_search),
-                        contentDescription = "Search"
-                    )
-                },
-                label = { Text(text = "Search", color = LightBlack, fontSize = 12.sp) },
-                textStyle = TextStyle(
-                    color = Color.Black,
-                    fontFamily = FontFamily.Monospace
-                ),
-                colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    textColor = Black
-                )
+                    .padding(top = 10.dp,),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             )
-        }
-        LazyColumn(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally)
-        {
-            itemsIndexed(needList) { index, item ->
-                Column(
-                    Modifier
+            {
+
+                TextField(
+                    value = search,
+                    onValueChange = { newText -> search = newText },
+                    modifier = Modifier
+                        .padding(bottom = 25.dp, top = 30.dp, end = 20.dp, start = 20.dp)
+                        .height(46.dp)
                         .width(screenWidth - 40.dp)
-                        .padding(vertical = 0.dp, horizontal = 0.dp)) {
-                    Row(
+                        .border(1.dp, color = LightBlack, shape = RoundedCornerShape(10.dp)),
+                    leadingIcon = {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_search),
+                            contentDescription = "Search"
+                        )
+                    },
+                    label = { Text(text = "Search", color = LightBlack, fontSize = 12.sp) },
+                    textStyle = TextStyle(
+                        color = Color.Black,
+                        fontFamily = FontFamily.Monospace
+                    ),
+                    colors = TextFieldDefaults.textFieldColors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        textColor = Black
+                    )
+                )
+            }
+            LazyColumn(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally)
+            {
+                itemsIndexed(needList) { index, item ->
+                    Column(
                         Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 15.dp)
-                            .background(White)
-                            .border(1.dp, color = LightBlack, shape = RoundedCornerShape(8.dp)),) {
-                        Column(
+                            .width(screenWidth - 40.dp)
+                            .padding(vertical = 0.dp, horizontal = 0.dp)) {
+                        Row(
                             Modifier
-                                .width(80.dp)
-                                .padding(top = 38.dp)
-                                .fillMaxHeight(),
-                        horizontalAlignment = Alignment.CenterHorizontally) {
-                            Image(painter = painterResource(id = R.drawable.no_image), contentDescription ="no image", modifier = Modifier.size(30.dp) )
-                        }
-                        Column {
-                            Spacer(modifier = Modifier.height(10.dp))
-                            Row(Modifier.fillMaxWidth(),horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
-                                needList[index]?.Title?.let {
-                                    Text(text = it, fontSize = 30.sp, color = TextBlue)
-                                }
-                                Image(painter = painterResource(id = R.drawable.next_arrow), contentDescription ="next", modifier = Modifier
-                                    .size(30.dp)
-                                    .padding(end = 8.dp)
-                                    .clickable {
-                                        titre = ""
-                                        titre = needList[index]?.Title
-                                        if (titre != "") {
-                                            titre = needList[index]?.Title
-                                            navController.navigate(route = Screen.NeedDetails.route)
-                                        }
-                                    })
+                                .fillMaxWidth()
+                                .padding(vertical = 15.dp)
+                                .background(White)
+                                .border(1.dp, color = LightBlack, shape = RoundedCornerShape(8.dp)),) {
+                            Column(
+                                Modifier
+                                    .width(80.dp)
+                                    .padding(top = 38.dp)
+                                    .fillMaxHeight(),
+                                horizontalAlignment = Alignment.CenterHorizontally) {
+                                Image(painter = painterResource(id = R.drawable.no_image), contentDescription ="no image", modifier = Modifier.size(30.dp) )
                             }
-                            Spacer(modifier = Modifier.height(5.dp))
-                            Row(verticalAlignment = Alignment.Bottom){
-                                Column() {
-                                    Row() {
-                                        Image(
-                                            painter = painterResource(id = R.drawable.sector),
-                                            contentDescription = "sector",
-                                        )
-                                        needList[index]?.sector?.let{
-                                        Text(
-                                            text = it,
-                                            color = Black,
-                                            modifier = Modifier.padding(start = 10.dp)
-                                        )}
+                            Column {
+                                Spacer(modifier = Modifier.height(10.dp))
+                                Row(Modifier.fillMaxWidth(),horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
+                                    needList[index]?.Title?.let {
+                                        Text(text = it, fontSize = 30.sp, color = TextBlue)
                                     }
-                                    Spacer(Modifier.height(10.dp))
-                                    Row(
-                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                        modifier = Modifier.fillMaxWidth()
-                                    ) {
-                                        Row() {
-                                            Image(
-                                                painter = painterResource(id = R.drawable.localisation),
-                                                contentDescription = "sector"
-                                            )
-                                            needList[index]?.localisation?.let{
-                                            Text(
-                                                text = it,
-                                                color = Black,
-                                                modifier = Modifier.padding(start = 10.dp)
-                                            )}
-                                        }
-                                        Button(onClick = {
+                                    Image(painter = painterResource(id = R.drawable.next_arrow), contentDescription ="next", modifier = Modifier
+                                        .size(30.dp)
+                                        .padding(end = 8.dp)
+                                        .clickable {
                                             titre = ""
                                             titre = needList[index]?.Title
                                             if (titre != "") {
                                                 titre = needList[index]?.Title
-                                                showDialog.value = true
-                                                needIndex = index
-                                            } },
-                                            modifier = Modifier
-                                                .padding(end = 20.dp)
-                                                .width(80.dp)
-                                                .height(30.dp)
-                                                .clip(shape = RoundedCornerShape(5.dp))
-                                            ,
-                                            colors = ButtonDefaults.buttonColors(
-                                                backgroundColor = ComponentBlue
+                                                navController.navigate(route = Screen.NeedDetails.route)
+                                            }
+                                        })
+                                }
+                                Spacer(modifier = Modifier.height(5.dp))
+                                Row(verticalAlignment = Alignment.Bottom){
+                                    Column() {
+                                        Row() {
+                                            Image(
+                                                painter = painterResource(id = R.drawable.sector),
+                                                contentDescription = "sector",
                                             )
+                                            needList[index]?.sector?.let{
+                                                Text(
+                                                    text = it,
+                                                    color = Black,
+                                                    modifier = Modifier.padding(start = 10.dp)
+                                                )}
+                                        }
+                                        Spacer(Modifier.height(10.dp))
+                                        Row(
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            modifier = Modifier.fillMaxWidth()
                                         ) {
-                                            Text(text = "Publish", color = White)
+                                            Row() {
+                                                Image(
+                                                    painter = painterResource(id = R.drawable.localisation),
+                                                    contentDescription = "sector"
+                                                )
+                                                needList[index]?.localisation?.let{
+                                                    Text(
+                                                        text = it,
+                                                        color = Black,
+                                                        modifier = Modifier.padding(start = 10.dp)
+                                                    )}
+                                            }
+                                            Button(onClick = {
+                                                titre = ""
+                                                titre = needList[index]?.Title
+                                                if (titre != "") {
+                                                    titre = needList[index]?.Title
+                                                    showDialog.value = true
+                                                    needIndex = index
+                                                } },
+                                                modifier = Modifier
+                                                    .padding(end = 20.dp)
+                                                    .width(80.dp)
+                                                    .height(30.dp)
+                                                    .clip(shape = RoundedCornerShape(5.dp))
+                                                ,
+                                                colors = ButtonDefaults.buttonColors(
+                                                    backgroundColor = ComponentBlue
+                                                )
+                                            ) {
+                                                Text(text = "Publish", color = White)
+                                            }
                                         }
                                     }
                                 }
-}
-                            Spacer(modifier = Modifier.height(10.dp))
-                        }
+                                Spacer(modifier = Modifier.height(10.dp))
+                            }
                         }
                     }
                 }
             }
-        }
+        } },
+        bottomBar = { bottomNav(navController = navController) }
+    )
+
     }
 
 

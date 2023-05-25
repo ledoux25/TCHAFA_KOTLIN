@@ -33,7 +33,7 @@ val BackgroundBlack = Color(0xA000000)
 val Ah = Color(0xFFF3EADD)
 // nouvelle palette de couleur
 val primaryBlue = Color(0xFFF2C62EF)
-val secondBlue = Color(0xFFF5874BA)
+val secondBlue = Color(0xB05283FF)
 
 
 

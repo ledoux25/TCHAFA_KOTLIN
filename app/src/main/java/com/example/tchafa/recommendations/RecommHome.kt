@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.tchafa.R
+import com.example.tchafa.bar.bottomNav
 import com.example.tchafa.components.rememberImeState
 import com.example.tchafa.data.Need
 import com.example.tchafa.data.Recommendation
@@ -46,7 +47,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
-@SuppressLint("UnrememberedMutableState")
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 fun RecommendationHome(navController: NavController) {
 
     val imeState = rememberImeState()
@@ -101,166 +102,173 @@ fun RecommendationHome(navController: NavController) {
             Log.i("HomePage","HomePage : $it")
         }
 
-    Column(
-        Modifier
-            .background(LightGreen)
-            .fillMaxSize()
-    ) {
-        Column(
-            Modifier
-                .height(screenHeight / 6)
-                .fillMaxWidth()
-                .background(Background)
-        )
-        {
-                Image(
-                    painter = painterResource(R.drawable.back_arrow),
-                    contentDescription = "back",
-                    modifier = Modifier
-                        .padding(start = 7.dp)
-                        .size(40.dp)
-                        .clickable { navController.popBackStack() }
-                )
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                Text(
-                    text = "Recommendations",
-                    fontSize = 38.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = White
-                )
-            }
-        }
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp,),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        )
-        {
-            Image(painter = painterResource(R.drawable.plus), contentDescription = "sort", modifier = Modifier
-                .padding(start = 20.dp)
-                .rotate(90f)
-                .clickable { showDialog.value = true }
-                .size(30.dp))
-            TextField(
-                value = search,
-                onValueChange = { newText -> search = newText },
-                modifier = Modifier
-                    .padding(start = 20.dp, end = 20.dp)
-                    .height(46.dp)
-                    .width(screenWidth - 80.dp)
-                    .border(1.dp, color = LightBlack, shape = RoundedCornerShape(25.dp)),
-                leadingIcon = {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_search),
-                        contentDescription = "Search"
-                    )
-                },
-                label = { Text(text = "Search", color = LightBlack, fontSize = 12.sp) },
-                textStyle = TextStyle(
-                    color = Color.Black,
-                    fontFamily = FontFamily.Monospace
-                ),
-                colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor  = Color.Transparent
-                )
-            )
-        }
-
-        LazyColumn(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
-            .fillMaxHeight()
-            .fillMaxWidth()
-            .padding(top = 20.dp))
-        {
-            itemsIndexed(recomList) { index, item ->
+    Scaffold(
+        content = {
+            Column(
+                Modifier
+                    .background(LightGreen)
+                    .fillMaxSize()
+            ) {
                 Column(
                     Modifier
-                        .clip(shape = RoundedCornerShape(5.dp))
-                        .background(Color.White)
-                        .height(screenHeight / 5.5F)
-                        .width(screenWidth - 25.dp)
-                        .padding(top = 7.5.dp),
-                horizontalAlignment = Alignment.CenterHorizontally)
+                        .height(screenHeight / 6)
+                        .fillMaxWidth()
+                        .background(Background)
+                )
                 {
-                    Row(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 10.dp)
-                    ) {
+                    Image(
+                        painter = painterResource(R.drawable.back_arrow),
+                        contentDescription = "back",
+                        modifier = Modifier
+                            .padding(start = 7.dp)
+                            .size(40.dp)
+                            .clickable { navController.popBackStack() }
+                    )
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                        Text(
+                            text = "Recommendations",
+                            fontSize = 38.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = White
+                        )
+                    }
+                }
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 10.dp,),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                )
+                {
+                    Image(painter = painterResource(R.drawable.plus), contentDescription = "sort", modifier = Modifier
+                        .padding(start = 20.dp)
+                        .rotate(90f)
+                        .clickable { showDialog.value = true }
+                        .size(30.dp))
+                    TextField(
+                        value = search,
+                        onValueChange = { newText -> search = newText },
+                        modifier = Modifier
+                            .padding(start = 20.dp, end = 20.dp)
+                            .height(46.dp)
+                            .width(screenWidth - 80.dp)
+                            .border(1.dp, color = LightBlack, shape = RoundedCornerShape(25.dp)),
+                        leadingIcon = {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_search),
+                                contentDescription = "Search"
+                            )
+                        },
+                        label = { Text(text = "Search", color = LightBlack, fontSize = 12.sp) },
+                        textStyle = TextStyle(
+                            color = Color.Black,
+                            fontFamily = FontFamily.Monospace
+                        ),
+                        colors = TextFieldDefaults.textFieldColors(
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor  = Color.Transparent
+                        )
+                    )
+                }
+
+                LazyColumn(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth()
+                    .padding(top = 20.dp))
+                {
+                    itemsIndexed(recomList) { index, item ->
                         Column(
                             Modifier
-                                .width((screenWidth) / 1.98f)
-                                .padding(start = 25.dp)) {
-                            recomList[index]?.FullName?.let{
-                                Text(
-                                    text = it,
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.W300,
-                                )
-                            }
-                            recomList[index]?.NumeroRecom?.let {
-                                Text(
-                                    text = it,
-                                    fontSize = 15.sp,
-                                    fontWeight = FontWeight.W300,
-                                )
-                            }
-
-                        }
-                        Row(Modifier.padding(top = 8.dp)) {
-                            recomList[index]?.Etat?.let {
-                                Text(
-                                    text = it,
-                                    modifier = Modifier
-                                        .width(100.dp)
-                                        .border(1.dp, LightBlack, RoundedCornerShape(20.dp))
-                                        .clip(shape = RoundedCornerShape(20.dp))
-                                        .background(LightGray)
-                                        .padding(8.dp),
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-                            Icon(
-                                imageVector = Icons.Filled.Delete,
-                                contentDescription = "",
-                                tint = colorResource(android.R.color.holo_red_light),
-                                modifier = Modifier
-                                    .width(28.dp)
-                                    .height(28.dp)
-                                    .padding(start = 4.dp)
-                                    .clickable { name = recomList[index]?.FullName
-                                        deleteDataFromFirebase(name, context, navController)
-                                    }
-                            )
-                        }
-                    }
-                    recomList[index]?.Recommendation?.let {
-                            OutlinedTextField(
-                                modifier = Modifier
+                                .clip(shape = RoundedCornerShape(5.dp))
+                                .background(Color.White)
+                                .height(screenHeight / 5.5F)
+                                .width(screenWidth - 25.dp)
+                                .padding(top = 7.5.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally)
+                        {
+                            Row(
+                                Modifier
                                     .fillMaxWidth()
-                                    .height(65.dp)
-                                    .padding(start = 15.dp, end = 15.dp)
-                                    .clip(shape = RoundedCornerShape(20.dp))
-                                    .background(LightGray),
-                                shape = RoundedCornerShape(5.dp),
-                                value = it,
-                                onValueChange = { TODO() },
-                                maxLines = 3,
-                                textStyle = MaterialTheme.typography.caption,
-                                colors = TextFieldDefaults.outlinedTextFieldColors(
-                                    focusedBorderColor = Color.Transparent,
-                                    unfocusedBorderColor = Color.Transparent
-                                )
-                            )
-                        }
+                                    .padding(bottom = 10.dp)
+                            ) {
+                                Column(
+                                    Modifier
+                                        .width((screenWidth) / 1.98f)
+                                        .padding(start = 25.dp)) {
+                                    recomList[index]?.FullName?.let{
+                                        Text(
+                                            text = it,
+                                            fontSize = 20.sp,
+                                            fontWeight = FontWeight.W300,
+                                        )
+                                    }
+                                    recomList[index]?.NumeroRecom?.let {
+                                        Text(
+                                            text = it,
+                                            fontSize = 15.sp,
+                                            fontWeight = FontWeight.W300,
+                                        )
+                                    }
 
+                                }
+                                Row(Modifier.padding(top = 8.dp)) {
+                                    recomList[index]?.Etat?.let {
+                                        Text(
+                                            text = it,
+                                            modifier = Modifier
+                                                .width(100.dp)
+                                                .border(1.dp, LightBlack, RoundedCornerShape(20.dp))
+                                                .clip(shape = RoundedCornerShape(20.dp))
+                                                .background(LightGray)
+                                                .padding(8.dp),
+                                            textAlign = TextAlign.Center
+                                        )
+                                    }
+                                    Icon(
+                                        imageVector = Icons.Filled.Delete,
+                                        contentDescription = "",
+                                        tint = colorResource(android.R.color.holo_red_light),
+                                        modifier = Modifier
+                                            .width(28.dp)
+                                            .height(28.dp)
+                                            .padding(start = 4.dp)
+                                            .clickable {
+                                                name = recomList[index]?.FullName
+                                                deleteDataFromFirebase(name, context, navController)
+                                            }
+                                    )
+                                }
+                            }
+                            recomList[index]?.Recommendation?.let {
+                                OutlinedTextField(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(65.dp)
+                                        .padding(start = 15.dp, end = 15.dp)
+                                        .clip(shape = RoundedCornerShape(20.dp))
+                                        .background(LightGray),
+                                    shape = RoundedCornerShape(5.dp),
+                                    value = it,
+                                    onValueChange = { TODO() },
+                                    maxLines = 3,
+                                    textStyle = MaterialTheme.typography.caption,
+                                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                                        focusedBorderColor = Color.Transparent,
+                                        unfocusedBorderColor = Color.Transparent
+                                    )
+                                )
+                            }
+
+                        }
+                        Spacer(modifier = Modifier.height(15.dp))
+                    }
                 }
-                Spacer(modifier = Modifier.height(15.dp))
             }
-        }
-    }
+        },
+        bottomBar = { bottomNav(navController = navController) }
+    )
+
 }
 
 
@@ -457,7 +465,7 @@ fun addDataToFirebase(
 private fun deleteDataFromFirebase(Name: String?, context: Context, navController: NavController) {
 
     val db = FirebaseFirestore.getInstance();
-    db.collection("Users").document("$Email").collection("Needs").document("$Name").delete().addOnSuccessListener {
+    db.collection("Users").document("$Email").collection("Recoms").document("$Name").delete().addOnSuccessListener {
         Toast.makeText(context, "Needd Deleted successfully..", Toast.LENGTH_SHORT).show()
         navController.navigate(navController.currentDestination!!.id)
     }.addOnFailureListener {

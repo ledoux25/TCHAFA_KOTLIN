@@ -48,7 +48,7 @@ import com.google.firebase.ktx.Firebase
 import androidx.compose.material.IconButton as IconButton1
 
 private var user: FirebaseUser? = null
-public var Email :String? = "Sanguo"
+public var Email :String? = "Sangu"
 @Composable
 fun Login(navController: NavController) {
 
